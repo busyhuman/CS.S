@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
+#include <algorithm>
+#include <climits>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <list>
+#include <deque>
+#include <bitset>
+using namespace std;
+
+unsigned long long int cnt = 0;
+int arr[500001];
+int temp[260000];
+
+void Merging(int left, int right) {
+	int mid = (left + right) / 2;
+	int i = left, j = mid + 1, start = 0;
+	memset(temp, 0, sizeof((right-left+1)*4));
+	while (i <= mid && j <= right) {
+		if (arr[i] <= arr[j])
+			temp[start++] = arr[i++];
+		else {
+			temp[start++] = arr[j++];
+			cnt += mid+1 - i;
+		}
+	}
+	if (i>mid) {
+		for (int o = j; o <= right; o++)
+			temp[start++] = arr[o];
+	}
+	else {
+		for (int o = i; o <= mid; o++)
+			temp[start++] = arr[o];
+	}
+
+	start = 0;
+	for (int o = left; o <= right; o++) {
+		arr[o] = temp[start++];
+	}
+
+	return;
+}
+
+void MergeSort(int left, int right) {
+	int mid = (left + right) / 2;
+	if (left < right) {
+		MergeSort(left, mid);
+		MergeSort(mid + 1, right);
+		Merging(left, right);
+	}
+
+}
+
+int main() {
+
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+		cin >> arr[i];
+	MergeSort(0, n - 1);
+	cout << cnt;
+}
