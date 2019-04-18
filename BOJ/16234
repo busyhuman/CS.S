@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int arr[51][51],n,l,r;
+bool visit[51][51];
+int dy[4]={-1,0,1,0}, dx[4]={0,1,0,-1};
+queue<int> py,px,y, x;
+void bfs(int cnt, int sum){
+
+	while(!x.empty()){
+		int yf = y.front(), xf = x.front();
+
+		y.pop(), x.pop();
+		
+		for(int k=0;k<4;k++){
+			int imsiy = yf+dy[k], imsix = xf+dx[k];
+			if(imsiy < 0 || imsiy >= n || imsix < 0 || imsix >= n) continue;
+			
+			if(visit[imsiy][imsix]) continue; 
+	//			cout << imsiy << " " << imsix << " " << arr[imsiy][imsix] << " " << arr[yf][xf] << " " << visit[imsiy][imsix] << '\n';				
+			int wow = abs(arr[imsiy][imsix] - arr[yf][xf]);
+			if( l <= wow && wow <= r ){
+				visit[imsiy][imsix] = true;
+				cnt++;
+				sum += arr[imsiy][imsix];
+				y.push(imsiy);
+				x.push(imsix);
+				py.push(imsiy);
+				px.push(imsix);
+			}
+		}
+	}
+	sum = sum / cnt;
+	while(!px.empty()){
+		arr[py.front()][px.front()] = sum;
+		py.pop();
+		px.pop();
+	}
+	/*
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			cout << arr[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+		for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			cout << visit[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+    */
+}
+
+int main() {
+	cin >> n >> l >> r;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++)
+			scanf("%d",&arr[i][j]);
+	long long ans = 0;
+	while(true){
+		memset(visit,false,sizeof(visit));
+		bool ischanged = false;
+		for(int i=0;i<n;i++){
+
+			for(int j=0;j<n;j++){
+				if(visit[i][j]) continue;
+
+                int cnt = 1, sum = arr[i][j];
+                bool www = false;
+				for(int k=0;k<4;k++){
+					int imsiy = i+dy[k], imsix = j+dx[k];
+					if(imsiy < 0 || imsiy >= n || imsix < 0 || imsix >= n) continue;
+					if(visit[imsiy][imsix]) continue;
+					int wow = abs(arr[imsiy][imsix] - arr[i][j]);
+					if( l <= wow && wow <= r ){
+						ischanged = true;
+			             www = true;
+              //          cout << i << ' ' << j << " " << imsiy << " " << imsix << '\n';
+                    	y.push(i);
+                    	x.push(j);
+                    	y.push(imsiy);
+                    	x.push(imsix);
+                    	py.push(i);
+                    	px.push(j);
+                    	py.push(imsiy);
+                    	px.push(imsix);
+                    	visit[i][j] = true;
+                    	visit[imsiy][imsix] = true;
+                        cnt++;
+                        sum += arr[imsiy][imsix];
+					}
+				}
+                if(www){
+                    bfs(cnt,sum);
+                }
+	
+			}
+		
+		}
+		if(ischanged == false) break;
+		else ans++;
+    //    cout << ans << '\n';
+	}
+	cout << ans;
+}
