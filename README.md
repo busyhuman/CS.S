@@ -1,2 +1,2 @@
 # Algorithm
-문제 풀기
+https://www.acmicpc.net/user/busyhuman
