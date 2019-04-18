@@ -1,0 +1,187 @@
+#include <iostream>
+
+#include <string>
+
+#include <cstdio>
+
+#include <cstring>
+
+#include <cmath>
+
+#include <algorithm>
+
+#include <stack>
+
+#include <queue>
+
+#include <vector>
+
+#include <deque>
+
+#include <bitset>
+
+#include <set>
+
+#include <map>
+
+using namespace std;
+
+#define inf 2000000007
+
+#define mod 1000000007
+
+const int TEN = 10;
+
+bool arr[11][11];
+
+int sumofone;
+
+int ans = inf;
+
+void makeArr(int y, int x, int su, int what){
+
+	for(int i=y;i<y+su;i++){
+
+		for(int j=x;j<x+su;j++){
+
+			arr[i][j] = what;
+
+		}
+
+	}
+
+}
+
+ 
+
+bool findArr(int y, int x, int su){
+
+	if(y+su > TEN || x+su > TEN) return false;
+
+	for(int i=y;i<y+su;i++){
+
+		for(int j=x;j<x+su;j++){
+
+			if(!arr[i][j]) {
+
+				return false;
+
+			}
+
+		}
+
+	}
+
+	return true;
+
+}
+
+ 
+
+void dfs(int y, int x, int num[5], int cnt, int sum){
+
+	if(sum > ans) return;
+
+	if(cnt == sumofone){
+
+		ans = min(ans, sum);
+
+		//	cout << "wow " << y << " " << x << " " << sum << '\n';
+
+	//	for(int i=0;i<5;i++) cout << num[i] << ' ';
+
+	//	cout << '\n';
+
+		return;
+
+	}
+
+ 
+
+	for(int i=y;i<TEN;i++){
+
+		for(int j=x;j<TEN;j++){
+
+				
+
+			if(arr[i][j]){
+
+		//		cout << i << " " << j << " " << cnt << " " << sumofone << " " << sum << '\n';
+
+				for(int k=5;k>=1;k--){
+
+					if(findArr(i,j,k) ){
+
+						if(num[k-1] != 5){
+
+							num[k-1]++;
+
+							makeArr(i,j,k,0);
+
+							dfs(i,0,num,cnt+k*k, sum+1);
+                       //     break;
+							makeArr(i,j,k,1);
+
+							num[k-1]--;
+
+						}
+
+					}
+
+				}
+
+                return;
+
+			}
+
+			
+
+		}
+
+	}
+
+ 
+
+}
+
+ 
+
+int main() {
+
+    ios_base::sync_with_stdio(false);
+
+	cin.tie(NULL);
+
+	
+
+	for(int i=0;i<TEN;i++){
+
+		for(int j=0;j<TEN;j++){
+
+			cin >> arr[i][j];
+
+			if(arr[i][j]) sumofone++;
+
+		}
+
+	}
+
+	int num[5]={0};
+
+	if(!sumofone){
+
+		cout << "0";
+
+		return 0;
+
+	}
+
+	
+
+	dfs(0,0,num,0,0);
+
+	if(ans == inf) cout << "-1";
+
+	else cout << ans;
+
+}
