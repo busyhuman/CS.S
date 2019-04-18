@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 1000000000
+int arr[21], dp[21][21][21], m;
+
+int dfs(int x, int y, int index) {
+	if (index == m) return 0;
+	if (dp[x][y][index] != -1) return dp[x][y][index];
+	return dp[x][y][index] = min(dfs(arr[index], y, index + 1) + abs(arr[index] - x), dfs(x, arr[index], index + 1) + abs(arr[index] - y));
+}
+
+int main() {
+	int n, x, y;
+	memset(dp, -1, sizeof(dp));
+	cin >> n;
+	cin >> x >> y;
+	cin >> m;
+	for (int i = 0; i < m; i++) cin >> arr[i];
+	cout << dfs(x, y, 0);
+}
