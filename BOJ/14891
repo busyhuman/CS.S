@@ -1,0 +1,99 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <list>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+string topny[4];
+int main(){
+    cin >> topny[0];
+    cin >> topny[1];
+    cin >> topny[2];
+    cin >> topny[3];
+    
+    int k;
+    cin >> k;
+    while(k--){
+        int num, dir;
+        cin >> num >> dir;
+        int imsi = dir;
+        num--;
+        int l=num,r=num;
+                
+        for(int i=num-1;i>=0;--i){
+             if(topny[i][2] != topny[i+1][6]) l = i;
+            else break;
+        }
+        for(int i=num+1;i<4;++i){
+            if(topny[i][6] != topny[i-1][2]) r = i;
+        else break;
+        }
+    
+                
+                
+        for(int i=num-1;i>=l;--i){
+                imsi = imsi == 1 ? -1 : 1;
+                if(imsi==1){
+                      int wow = topny[i][7];
+                      for(int j=7;j>=1;j--){
+                         topny[i][j] = topny[i][j-1];
+                      }
+                    topny[i][0] = wow;
+                } else{
+                      int wow = topny[i][0];
+                      for(int j=0;j<=6;j++){
+                         topny[i][j] = topny[i][j+1];
+                      }
+                      topny[i][7] = wow;
+                }
+        }
+        
+        
+        imsi = dir;
+        for(int i=num+1;i<=r;++i){
+                imsi = imsi == 1 ? -1 : 1;
+                if(imsi==1){
+                      int wow = topny[i][7];
+                      for(int j=7;j>=1;j--){
+                         topny[i][j] = topny[i][j-1];
+                      }
+                    topny[i][0] = wow;
+                } else{
+                      int wow = topny[i][0];
+                      for(int j=0;j<=6;j++){
+                         topny[i][j] = topny[i][j+1];
+                      }
+                      topny[i][7] = wow;
+                }
+        }
+        
+        
+        if(dir==1){
+                      int wow = topny[num][7];
+                      for(int j=7;j>=1;j--){
+                         topny[num][j] = topny[num][j-1];
+                      }
+                    topny[num][0] = wow;
+                } else{
+                      int wow = topny[num][0];
+                      for(int j=0;j<=6;j++){
+                         topny[num][j] = topny[num][j+1];
+                      }
+                      topny[num][7] = wow;
+                }
+        
+
+    }
+
+    cout << topny[0][0]-'0' + (topny[1][0]-'0') * 2 + (topny[2][0]-'0') * 4 + (topny[3][0] - '0') * 8;
+}
