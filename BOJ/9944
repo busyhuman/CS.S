@@ -1,0 +1,108 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+string arr[32];
+bool check[32][32];
+int n,m,cnt,dy[4] = {0,-1,0,1}, dx[4]={-1,0,1,0},sum,mini;
+
+void dfs(int yy, int xx, int count){
+	/*
+	cout << yy << " " << xx << " " << count << " " << sum << '\n';
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			if(arr[i][j] == '*') cout << "2";
+			else
+			cout << check[i][j];
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+	*/		
+	if(sum == cnt){
+
+		mini = min(mini,count);
+		return;
+	}
+
+	int y,x;
+	for(int i=0;i<4;i++){
+		int imsiy = dy[i], imsix = dx[i];
+		if(!check[yy][xx]){
+			check[yy][xx]=true;
+			sum++;	
+		}
+		y = yy, x= xx;
+		while(true){
+			y+=imsiy;
+			x+=imsix;
+					
+			if(y < 0 || y >= n || x < 0 || x >= m || check[y][x] || arr[y][x] == '*') {
+				y-=imsiy;
+				x-=imsix;
+			
+				break;
+			}
+			check[y][x] = true;
+			sum++;
+		}
+			//		cout << y << " " << x << " " << count << '\n';
+		if(y == yy && x == xx) continue;
+		dfs(y,x,count+1);
+		while(true){
+			if(y == yy && x == xx) {
+
+				break;
+			}
+			check[y][x] = false;
+			sum--;
+
+			y-=imsiy;
+			x-=imsix;
+		}
+	}
+	
+}
+
+int main() {
+	int tc=0;
+	while(cin >> n >> m){
+	 	cnt = 0;
+		mini = inf;
+		for(int i=0;i<n;i++) {
+			cin >> arr[i];
+			for(int j=0;j<m;j++){
+				if(arr[i][j] == '.') {
+					cnt++;
+				}
+			}
+		}
+		if(cnt == 1){
+			cout << "Case " << ++tc << ": 0" << '\n';
+			continue;
+		}
+		for(int i=0;i<n;i++){
+			for(int j=0;j<m;j++){
+				if(arr[i][j] == '.'){
+					memset(check,false,sizeof(check));
+					sum = 0;
+					dfs(i,j,0);
+				}
+			}
+		}
+		if(mini == inf) mini = -1;
+		cout << "Case " << ++tc << ": " << mini << '\n';
+	}
+}
