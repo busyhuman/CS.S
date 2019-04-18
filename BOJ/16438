@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+
+char arr[7][100];
+int n;
+void dfs(int start, int end, int day){
+	if(day >= 7) return;
+	if(start > end) return;
+	int mid = (start+end) / 2;
+//	cout << day << " " << start << " " << end << '\n';
+	for(int i=start;i<=mid;i++)
+		arr[day][i] = 'A';
+	for(int i=mid+1;i<=end;i++)
+		arr[day][i] = 'B';
+	/*
+	if(start == end){
+		if(arr[day][start] == 'A'){
+			arr[day][0] = 'B';
+		} else
+			arr[day][0] = 'A';
+	}
+	*/								   
+	dfs(start,mid,day+1);
+	dfs(mid+1,end,day+1);
+}
+
+int main() {
+	cin >> n;
+	
+	dfs(0,n-1,0);
+	for(int i=0;i<7;i++){
+		bool bb = true;
+		for(int j=1;j<n;j++){
+			if(arr[i][0] != arr[i][j]) bb = false;
+		}
+		if(bb){
+			if(arr[i][0] == 'A') arr[i][0] = 'B';
+			else arr[i][0] = 'A';
+		}
+		for(int j=0;j<n;j++){
+			cout << arr[i][j];
+		}
+		cout << '\n';
+	}
+}
