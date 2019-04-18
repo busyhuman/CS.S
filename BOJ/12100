@@ -1,0 +1,137 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,maxi=0,dy[4]={1,0,-1,0},dx[4]={0,-1,0,1};
+
+void dfs(int cnt, int arr[][21]){
+	/*
+	cout << cnt << '\n';	
+	for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				cout << arr[i][j] << " ";
+			}
+		cout << '\n';
+	}
+	cout << '\n';
+	*/
+	
+	if(cnt++ == 5){
+		for(int i=0;i<n;i++)
+			for(int j=0;j<n;j++)
+				maxi = max(maxi,arr[i][j]);
+		return;
+	}
+	
+
+	
+	int imsi[21][21];
+	
+	for(int k=0;k<4;k++){
+		for(int i=0;i<n;i++) for(int j=0;j<n;j++) imsi[i][j] = arr[i][j];
+		
+		if(k==0 || k==3){
+			for(int i=0;i<n;i++){
+				for(int j=0;j<n;j++){
+					if(imsi[i][j]==0)continue;
+					int imsiy = i, imsix= j;
+					for(int l=0;l<n;l++){
+						imsiy += dy[k], imsix += dx[k];
+						if(imsiy < 0 || imsiy >= n || imsix < 0 || imsix >= n) continue;
+						if(imsi[imsiy][imsix] == 0) continue;
+						if(imsi[imsiy][imsix] == imsi[i][j]){
+							imsi[i][j] *= 2;
+							imsi[imsiy][imsix] = 0;
+							break;
+						} else break;
+					}
+					
+				}
+			}
+			
+			for(int i=0;i<n;i++){
+				for(int j=0;j<n;j++){
+					if(imsi[i][j]==0){
+						int imsiy = i, imsix= j;
+						for(int l=0;l<n;l++){
+							imsiy += dy[k], imsix += dx[k];
+							if(imsiy < 0 || imsiy >= n || imsix < 0 || imsix >= n) continue;
+							if(imsi[imsiy][imsix] != 0){
+								imsi[i][j] = imsi[imsiy][imsix];
+								imsi[imsiy][imsix] = 0;
+								break;
+							}
+						}
+					}
+						
+				}
+			}
+	
+		}
+		
+		if(k==1 || k==2){
+			
+			for(int i=n-1;i>=0;i--){
+				for(int j=n-1;j>=0;j--){
+					if(imsi[i][j]==0)continue;
+					int imsiy = i, imsix= j;
+					for(int l=0;l<n;l++){
+						imsiy += dy[k], imsix += dx[k];
+						if(imsiy < 0 || imsiy >= n || imsix < 0 || imsix >= n) continue;
+						if(imsi[imsiy][imsix] == 0) continue;
+						if(imsi[imsiy][imsix] == imsi[i][j]){
+							imsi[i][j] *= 2;
+							imsi[imsiy][imsix] = 0;
+							break;
+						} else break;
+					}
+					
+				}
+			}
+			
+			for(int i=n-1;i>=0;i--){
+				for(int j=n-1;j>=0;j--){
+					if(imsi[i][j]==0){
+						int imsiy = i, imsix= j;
+						for(int l=0;l<n;l++){
+							imsiy += dy[k], imsix += dx[k];
+							if(imsiy < 0 || imsiy >= n || imsix < 0 || imsix >= n) continue;
+							if(imsi[imsiy][imsix] != 0){
+								imsi[i][j] = imsi[imsiy][imsix];
+								imsi[imsiy][imsix] = 0;
+								break;
+							}
+						}
+					}
+						
+				}
+			}
+			
+		}
+		
+		dfs(cnt,imsi);
+	}
+}
+
+int main(){
+	int arr[21][21];
+	cin >> n;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++)
+			scanf("%d",&arr[i][j]);
+	dfs(0,arr);
+	//if(maxi > 2048) maxi = 2048;
+	cout << maxi;
+}
