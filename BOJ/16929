@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <queue>
+#include <vector>
+using namespace std;
+int n,m,dy[4]={-1,0,1,0}, dx[4] = {0,1,0,-1};
+bool check[51][51];
+int st[51][51];
+string s[51];
+
+bool dfs(int y, int x, char color, int cnt){
+	check[y][x] = true;
+	for(int i=0;i<4;i++){
+		int imsiy = y+ dy[i], imsix = x + dx[i];
+		if(imsiy <0 || imsiy >= n || imsix < 0 || imsix >= m) continue;
+	//	cout << y << " " << x << " " << imsiy << " " << imsix << "\n";
+		if(check[imsiy][imsix] == false && s[imsiy][imsix] == color) {
+			st[imsiy][imsix] = cnt+1;	
+		//	cout << imsiy << " " << imsix << " " << st[imsiy][imsix] << '\n';
+			if(dfs(imsiy,imsix,color,cnt+1))
+				return true;
+		}
+		else if(check[imsiy][imsix] == true && s[imsiy][imsix] == color){
+			if(st[imsiy][imsix]+1 != st[y][x] && cnt >= 4){
+	//			cout << imsiy << " " << imsix << " " << st[imsiy][imsix] << '\n';
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+void dfs2(int y, int x, char color){
+	s[y][x] = 'x';
+	for(int i=0;i<4;i++){
+		int imsiy = y+ dy[i], imsix = x + dx[i];
+		if(imsiy <0 || imsiy >= n || imsix < 0 || imsix >= m) continue;
+		if(s[imsiy][imsix] == color){
+			dfs2(imsiy,imsix,color);
+		}
+	}
+}
+				  
+int main(){
+	cin >> n >> m;
+	for(int i=0;i<n;i++) cin >> s[i];
+	
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			if(s[i][j] != 'x'){
+				memset(check,false,sizeof(check));
+				memset(st,false,sizeof(st));
+				st[i][j] = 1;
+				if(dfs(i,j,s[i][j],1)){
+					cout << "Yes";
+					return 0;
+				}
+				dfs2(i,j,s[i][j]);
+			}
+		}
+	}
+	cout << "No";
+}
