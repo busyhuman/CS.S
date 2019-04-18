@@ -1,0 +1,113 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000007
+#define mod 1000000007
+int n, m, arr[9][9],limit, ans, dy[4] = {0,1,0,-1}, dx[4] = {1,0,-1,0};
+int check[9][9];
+vector<int> yy,xx;
+int findZeroInArr(){
+	int cnt = 0;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<m;j++)
+			if(arr[i][j] == 0) cnt++;
+	
+	return cnt;
+}
+
+void fillArr(int y, int x, int dir, int su){
+	while(true){
+		y+=dy[dir], x+=dx[dir];
+		if(y < 0 || y >= n || x < 0 || x >= m || arr[y][x] == 6) break;
+
+		if(arr[y][x] >= 1 && arr[y][x] <= 5) continue;
+		if(su){
+			arr[y][x] = su;
+			check[y][x]++;
+		} else{
+			if(--check[y][x] == 0) arr[y][x] = su;
+		}
+	}
+}
+
+void dfs(int cnt){
+	if(cnt == limit){
+		ans = min(ans, findZeroInArr() );
+		return;
+	}
+	int y = yy[cnt], x =xx[cnt], tv = arr[yy[cnt]][xx[cnt]];
+	for(int i=0;i<4;i++){
+		if(tv == 1){
+			fillArr(y,x,i,7);
+		} else if(tv == 2){
+			fillArr(y,x,i,7);
+			fillArr(y,x,(i+2)%4,7);
+		}else if(tv == 3){
+			fillArr(y,x,i,7);
+			fillArr(y,x,(i+3)%4,7);
+		}else if(tv == 4){
+			fillArr(y,x,i,7);
+			fillArr(y,x,(i+2)%4,7);
+			fillArr(y,x,(i+3)%4,7);
+		}else if(tv == 5){
+			fillArr(y,x,i,7);
+			fillArr(y,x,(i+1)%4,7);
+			fillArr(y,x,(i+2)%4,7);
+			fillArr(y,x,(i+3)%4,7);
+		}
+		
+		dfs(cnt + 1);
+		
+		if(tv == 1){
+			fillArr(y,x,i,0);
+		} else if(tv == 2){
+			fillArr(y,x,i,0);
+			fillArr(y,x,(i+2)%4,0);
+		}else if(tv == 3){
+			fillArr(y,x,i,0);
+			fillArr(y,x,(i+3)%4,0);
+		}else if(tv == 4){
+			fillArr(y,x,i,0);		
+			fillArr(y,x,(i+2)%4,0);
+			fillArr(y,x,(i+3)%4,0);
+		}else if(tv == 5){
+			fillArr(y,x,i,0);
+			fillArr(y,x,(i+1)%4,0);
+			fillArr(y,x,(i+2)%4,0);
+			fillArr(y,x,(i+3)%4,0);
+		}
+		
+		
+	}	// 4-dir for
+
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m;
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			cin >> arr[i][j];
+			if(arr[i][j] >= 1 && arr[i][j] <= 5){
+				limit++;
+				yy.push_back(i);
+				xx.push_back(j);
+			}
+		}
+	}
+	ans = findZeroInArr();
+	if(!yy.empty()) dfs(0);
+	cout << ans;
+}
