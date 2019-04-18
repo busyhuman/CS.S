@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,k;
+bool arr[100004];
+int p[100001]={0};
+void BFS(){
+	deque<int> x,l;
+	x.push_back(n);
+	l.push_back(0);
+//	int cnt=inf,ans=0;
+
+	while (!x.empty()){
+		int xf = x.front(), lf = l.front();
+	//	cout << xf << '\n';
+
+		x.pop_front();
+		l.pop_front();
+		if(xf == k){
+			cout << lf << '\n';
+			break;
+		}
+		if (xf * 2 <= 100000 && !arr[xf*2]){
+			x.push_back(xf * 2);
+			l.push_back(lf + 1);
+			arr[xf*2] = true;
+			p[xf*2] = xf;
+		
+		}
+		if (xf + 1 <= 100000 && !arr[xf + 1]){
+			x.push_back(xf + 1);
+			l.push_back(lf + 1);
+			arr[xf+1] = true;
+			p[xf+1] = xf;
+		}
+		if (xf - 1 >= 0 && xf <= 100000 && !arr[xf - 1]){
+			x.push_back(xf - 1);
+			l.push_back(lf + 1);
+			arr[xf-1] = true;
+			p[xf-1]= xf;
+		}
+
+	}
+	if(n == k){
+		cout << n;
+		return;
+	}
+	int prev=p[k];
+	vector<int> v;
+	v.push_back(k);
+	while(true){
+		v.push_back(prev);
+		if(prev == n) break;
+		prev = p[prev];
+	}
+	for(int i=v.size()-1;i>=0;i--)
+		cout << v[i] << ' ';
+	
+}
+
+int main(){
+	cin >> n >> k;
+	BFS();
+	return 0;
+}
