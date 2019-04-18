@@ -98,7 +98,7 @@ queue<int> count;
                 }
             }
             
-            
+           
         }
     }
     if(red.empty() || ccc) cout << "-1";
