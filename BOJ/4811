@@ -1,0 +1,23 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+int main() {  
+    int n;
+    long long dp[32][32]={0};
+    dp[1][0]=1;
+    dp[2][0]=1;
+    dp[2][1]=1;
+    for(int i=3;i<=31;i++){
+        dp[i][0]=1;
+        for(int j=1;j<i-1;j++){
+            for(int k=0;k<=j;k++)
+                dp[i][j] += dp[i-1][k];
+        }
+        dp[i][i-1] = dp[i][i-2];
+    }
+    while(true){
+        scanf("%d",&n);
+        if(!n)break;
+        printf("%lld\n",dp[n+1][n]);
+    }
+}
