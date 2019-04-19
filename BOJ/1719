@@ -1,0 +1,65 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000007
+#define mod 1000000007
+int n, m;
+int arr[201][201];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m;
+	for(int i=0;i<m;i++){
+		int x,y,z;
+		cin >> x >> y >> z;
+		arr[x][y] = arr[y][x] = z;
+	}
+
+	
+	for(int i=1;i<=n;i++){
+		priority_queue< tuple<int, int, int>> pq;
+		int dist[202], ans[202]={0};
+		fill(dist, dist+n+1,inf);
+		
+		for(int j=1;j<=n;j++){
+			if(arr[i][j]) {
+				pq.push( make_tuple(-arr[i][j], j,j ));
+				dist[j] = min(dist[j], arr[i][j]);
+				ans[j] = j;
+			}
+		}
+//		visit[i]=true;
+		while(!pq.empty() ){
+			int fy = get<0>(pq.top()) * (-1), fx = get<1>(pq.top()),fz = get<2>(pq.top());
+		//	cout << fy << ' ' << fx << ' ' << fz << '\n';
+			pq.pop();
+			
+			for(int j=1;j<=n;j++){
+				if(arr[fx][j] && (-arr[fx][j]-fy)*(-1) < dist[j]) {
+					dist[j] = (-arr[fx][j]-fy)*(-1);
+					pq.push( make_tuple(-fy-arr[fx][j], j, fz));
+					ans[j] = fz;
+				}
+			}
+		}
+		for(int j=1;j<=n;j++) {
+			if(i==j) {
+				cout << "- ";
+				continue;
+			}
+			cout << ans[j] << ' ';
+		}
+		cout << '\n';
+	}	// for
+}
