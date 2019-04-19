@@ -1,0 +1,86 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+vector<int> tree, lazy;
+
+void late(int node, int start, int end){
+	if(lazy[node]){
+	//	cout << "lazynode : " << lazy[node] << '\n';
+		tree[node] = (end-start+1) - tree[node];
+	//	cout << "lazy : " << start << " " << end << " " << tree[node] << '\n';
+		if(start != end){
+			if(!lazy[node*2])
+				lazy[node*2] =1;
+			else 
+				lazy[node*2] = 0;
+			if(!lazy[node*2+1])
+				lazy[node*2+1] =1;
+			else 
+				lazy[node*2+1] = 0;
+		}
+		lazy[node] = 0;
+	}
+}
+
+void update(int node, int start, int end, int left, int right){
+	late(node,start,end);
+
+	if(start > right || end < left) return;
+
+	if(left <= start && end <= right){
+		tree[node] = (end-start+1) - tree[node];
+		//cout << start << " " << end << " " << tree[node] << '\n';
+		if(start != end){
+			if(!lazy[node*2])
+				lazy[node*2] =1;
+			else 
+				lazy[node*2] = 0;
+			if(!lazy[node*2+1])
+				lazy[node*2+1] =1;
+			else 
+				lazy[node*2+1] = 0;
+		}
+		return;
+	}
+	update(node*2,start,(start+end)/2,left,right);
+	update(node*2+1,(start+end)/2+1,end,left,right);
+	tree[node] = tree[node*2] + tree[node*2+1];
+}
+
+int sum(int node, int start, int end, int left, int right){
+		late(node,start,end);
+	if(start > right || end < left) return 0;
+	
+	if(left <= start && end <= right) {
+	//	cout << "sum함수 : " << start << " " << end << " " << tree[node] << '\n';
+		return tree[node];
+	}
+	return sum(node*2,start,(start+end)/2,left,right) + sum(node*2+1,(start+end)/2+1,end,left,right);
+}
+int main(){
+	int n,m,h,tree_size;
+	cin >> n >> m;
+	h = ceil(log2(n))+1;
+	tree_size = 1 << (h+1);
+	tree.resize(tree_size);
+	lazy.resize(tree_size);
+	while(m--){
+		int o,s,t;
+		scanf("%d %d %d", &o, &s, &t);
+		if(!o) update(1,1,n,s,t);
+		else cout << sum(1,1,n,s,t) << '\n';
+	}
+}
