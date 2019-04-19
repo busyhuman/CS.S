@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n;
+long long arr[500001], brr[1000001],tree[1100001];
+
+void update(int start,int end, int node, int index){
+	
+	if(start > index || end < index) return;
+	
+	if(start == end){
+		tree[node] = 1;
+		return;
+	}
+	
+	int mid = (start + end) /2;
+	
+	update(start,mid,node*2, index);
+	update(mid+1,end,node*2+1, index);
+	tree[node] = tree[node*2] + tree[node*2+1];
+}
+
+long long query(int start, int end, int node, int left, int right){
+	if(end < left || right < start) return 0;
+	
+	if(left <= start && end <= right) return tree[node];
+	
+	int mid = (start +end ) /2;
+	return query(start,mid,node*2,left,right) + query(mid+1,end,node*2+1,left, right);
+}
+
+int main() {
+	cin >> n;
+	for(int i=1;i<=n;i++){
+		scanf("%lld",&arr[i]);
+	}
+	for(int i=1;i<=n;i++){
+		int imsi;
+		scanf("%d",&imsi);
+		brr[imsi] = i;
+	}
+	long long ans =0;
+	for(int i=1;i<=n;i++){
+		ans += query(1, n, 1,brr[arr[i]], n);
+		update(1,n,1,brr[arr[i]]);
+	}
+	cout << ans;
+}
