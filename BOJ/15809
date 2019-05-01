@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, arr[100001], parent[100001];
+
+int find(int u){
+	if(parent[u] == u) return u;
+	return parent[u] = find(parent[u]);
+}
+
+void coo(int x, int y){
+	x = find(x);
+	y = find(y);
+	
+	if(arr[x] > arr[y]) swap(x,y);
+	
+	parent[x] = y;
+	arr[y] += arr[x];
+	arr[x] = 0;
+}
+
+void war(int x, int y){
+	x = find(x);
+	y = find(y);
+	
+	if(arr[x] > arr[y]) swap(x,y);
+	
+	parent[x] = y;
+	arr[y] -= arr[x];
+	arr[x] = 0;
+
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m;
+	for(int i=1;i<=n;i++) cin >> arr[i];
+	for(int i=1;i<=n;i++) parent[i] = i;
+	
+	while(m--){
+		int o,p,q;
+		cin >> o >> p >> q;
+		if(o == 1){
+			coo(p, q);
+		} else if(o == 2){
+			war(p, q);
+		}
+	}
+	priority_queue<int, vector<int>, greater<int> > pq;
+	for(int i=1;i<=n;i++)
+		if(arr[i]) pq.push(arr[i]);
+	cout << pq.size() << '\n';
+	while( !pq.empty() ){
+		cout << pq.top() << ' ';
+		pq.pop();
+	}
+}
