@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+bool ismw[1001], check[1001];
+vector< pair<int, int > > arr[1001];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int n, m;
+	char mw;
+	cin >> n >> m;
+	for(int i=1;i<=n;i++){
+		cin >> mw;
+		if(mw == 'M') ismw[i] = true;
+	}
+	for(int i=0;i<m;i++){
+		int x,y,z;
+		cin >> x >> y >> z;
+		if(ismw[x] != ismw[y]){
+			arr[x].push_back( make_pair(z,y) );
+			arr[y].push_back( make_pair(z,x) );
+		}
+	}
+	
+	priority_queue< pair<int ,int> > pq;
+	
+	pq.push( make_pair(0,1) );
+	int ans = 0;
+	int cnt = 0, wow = n;
+	while(!pq.empty()){
+		int qf = -pq.top().first, qs = pq.top().second;
+		pq.pop();
+		if(check[qs]) continue;
+		check[qs] = true;
+		cnt++;
+	//	cout << qs << ' ' << qf << '\n';
+		ans += qf;
+		
+		int len = arr[qs].size();
+		for(int i=0;i<len;i++){
+			int su = arr[qs][i].second, su2 = arr[qs][i].first;
+	//		cout << su << ' ' << su2 << '\n';
+			if( ismw[qs] != ismw[su] && check[su] == false){
+				pq.push( make_pair(-su2, su) );
+			}
+		}
+	}
+	if(cnt != wow) cout << "-1";
+	else cout << ans;
+}
