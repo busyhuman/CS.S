@@ -1,0 +1,121 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, r;
+int arr[101][101], ans[101][101];
+
+void copyArr(int r, int c){
+	for(int i=0;i<r;i++){
+		for(int j=0;j<c;j++){
+			arr[i][j] = ans[i][j];
+		}
+	}
+}
+
+void printArr(int r, int c){
+	for(int i=0;i<r;i++){
+		for(int j=0;j<c;j++){
+			cout << ans[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+}
+
+void no1(){
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			ans[i][j] = arr[n-i-1][j];
+		}
+	}
+}
+
+void no2(){
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			ans[i][j] = arr[i][m-j-1];
+		}
+	}
+}
+
+void no3(){
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			ans[j][i] = arr[n-i-1][j];	
+		}
+	}
+	swap(n,m);
+}
+
+void no4(){
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			ans[j][i] = arr[i][m-j-1];	
+		}
+	}
+	swap(n,m);
+}
+
+void no5(){
+	int nd = n/2, md = m/2;
+	for(int i=0;i<nd;i++){
+		for(int j=0;j<md;j++){
+			ans[i][j] = arr[i + nd][j];
+			ans[i][j+md] = arr[i][j];
+			ans[i+nd][j+md] = arr[i][j+md];
+			ans[i+nd][j] = arr[i+nd][j+md];
+		}
+	}
+}
+
+void no6(){
+	int nd = n/2, md = m/2;
+	for(int i=0;i<nd;i++){
+		for(int j=0;j<md;j++){
+			ans[i][j] = arr[i][j+md];
+			ans[i][j+md] = arr[i+nd][j+md];
+			ans[i+nd][j+md] = arr[i+nd][j];
+			ans[i+nd][j] = arr[i][j];
+		}
+	}
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int no;
+    cin >> n >> m >> r;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<m;j++)
+			cin >> arr[i][j];
+	while(r--){
+		cin >> no;
+		if(no == 1){
+			no1();
+		} else if(no == 2){
+			no2();
+		} else if(no == 3){
+			no3();
+		} else if(no == 4){
+			no4();
+		} else if(no == 5){
+			no5();
+		} else if(no == 6){
+			no6();
+		}
+		memset(arr,0,sizeof(ans));
+		copyArr(n,m);
+	}
+		printArr(n,m);
+}
