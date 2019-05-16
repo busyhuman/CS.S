@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, r, k;
+int arr[301][301];
+
+void rotate(){
+	k = min(n, m) / 2;
+	int nn = n, mm= m;
+	
+	for(int i=0;i<k;i++){
+		int now = r % ((nn-1)*2 + (mm-1)*2);
+		while(now--){
+
+			int imsi = arr[i][i];
+			
+			for(int j=i;j<m-i-1;j++) arr[i][j] = arr[i][j+1];
+			for(int j=i;j<n-i-1;j++) arr[j][m-i-1] = arr[j+1][m-i-1];
+			for(int j=m-i-1;j>i;j--) arr[n-i-1][j] = arr[n-i-1][j-1];
+			for(int j=n-i-1;j>i+1;j--) arr[j][i] = arr[j-1][i];
+
+			arr[i+1][i] = imsi;
+		}
+		nn-=2;
+		mm-=2;
+	}
+	
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n >> m >> r;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<m;j++)
+			cin >> arr[i][j];
+	rotate();
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			cout << arr[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+}
