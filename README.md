@@ -1,2 +1,2 @@
 # Algorithm
-https://www.acmicpc.net/user/busyhuman
+백준 : https://www.acmicpc.net/user/busyhuman
