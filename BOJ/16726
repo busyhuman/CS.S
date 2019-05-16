@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, dy[4]={-1,0,1,0}, dx[4] = {0,1,0,-1};
+string arr[51];
+vector<int> dir[2602];
+bool visit[2602];
+int from[2602], to[2602];
+
+int dfs(int now){
+	if(visit[now]) return 0;
+	visit[now] = true;
+	int len = dir[now].size();
+	
+	for(int i=0;i<len;i++){
+		int go = dir[now][i];
+		if(to[go] == 0 || ( visit[to[go]] == false && dfs(to[go]) ) ){
+			from[now] = go;
+			to[go] = now;
+	//		cout << now << ' ' << go << '\n';
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n >> m;
+	int numOfX=0;
+	for(int i=0;i<n;i++) {
+		cin >> arr[i];
+		for(int j=0;j<m;j++) if(arr[i][j] == 'X') numOfX++;
+	}
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			if(arr[i][j] == 'X') continue;
+			for(int k=0;k<4;k++){
+				int imsiy = i+dy[k], imsix = j+dx[k];
+
+				if(imsiy < 0 || imsiy >= n || imsix < 0 || imsix >= m) continue;
+				if(arr[imsiy][imsix] == 'X') continue;
+				
+				dir[ i*m + j + 1 ].push_back( imsiy*m + imsix + 1); 
+			}
+		}
+	}
+	int numOfTwo = 0;
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			memset(visit,false,sizeof(visit));
+			numOfTwo += dfs( i*m + j + 1);
+		}
+	}
+//	for(int i=1;i<=12;i++) cout << from[i] << ' ' << to[from[i]] << '\n';
+	numOfTwo = numOfTwo >> 1;
+	cout << numOfTwo + (n*m - numOfTwo*2 - numOfX); 
+}
