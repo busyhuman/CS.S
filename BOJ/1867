@@ -1,0 +1,54 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, ground[501];
+vector<int> r[501];
+bool visit[501];
+int dfs(int now){
+	if( visit[now] ) return 0;
+	visit[now] = true;
+//	cout << now << '\n';
+
+	int len = r[now].size();
+
+	for(int i=0;i<len;i++){
+		int su = r[now][i];
+	//	cout << now << ' ' << su << '\n';
+		if(ground[su] == 0 || (visit[ su ] == false && dfs( ground[su] )) ){
+			ground[su] = now;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n >> m;
+	while(m--){
+		int x, y;
+		cin >> x >> y;
+		r[x].push_back(y);
+		
+	}
+	int cnt= 0;
+	for(int i=1;i<=n;i++){
+		memset(visit, false, sizeof(visit) );
+		cnt += dfs(i);
+	}
+	cout << cnt;
+}
