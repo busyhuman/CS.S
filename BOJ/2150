@@ -1,0 +1,90 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int v,e;
+vector<int> arr[10001], rev[10001];
+bool visit[10001];
+vector< int > ans[10001];
+stack<int> st;
+int cnt;
+void dfs(int now) {
+	if(visit[now]) return;
+	visit[now] = true;
+
+	int len = arr[now].size();
+	
+	for(int i=0;i<len;i++){
+		int su = arr[now][i];
+		dfs(su);
+	}
+	st.push(now);
+}
+
+void dfss(int now){
+	if(visit[now]) return;
+	visit[now] = true;
+	ans[cnt].push_back(now);
+	int len = rev[now].size();
+//	cout << now << '\n';
+	for(int i=0;i<len;i++){
+		int su = rev[now][i];
+		dfss(su);
+	}
+	
+}
+
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> v >> e;
+	for(int i=0;i<e;i++){
+		int x, y;
+		cin >> x >> y;
+		arr[x].push_back(y);
+		rev[y].push_back(x);
+	}
+	for(int i=1;i<=v;i++){
+	//	sort( rev[i].begin(), rev[i].end() );
+		dfs(i);	
+	}
+	memset(visit, false, sizeof(visit) );
+	while( !st.empty() ){
+		int stf = st.top();
+		st.pop();
+		
+		if(!visit[stf]){
+			dfss(stf);
+			cnt++;
+		}
+	
+	}
+	cout << cnt << '\n';
+	vector< pair<int, int> > idx;
+	for(int i=0;i<cnt;i++){
+		sort( ans[i].begin(), ans[i].end() );
+		idx.push_back( make_pair(ans[i][0] ,i) );
+	}
+	sort(idx.begin(), idx.end() );
+	for(int i=0;i<cnt;i++){
+		int go = idx[i].second;
+		int len = ans[go].size();
+
+		for(int j=0;j<len;j++)
+			cout << ans[go][j] << ' ';
+		cout << "-1\n";
+	}
+}
