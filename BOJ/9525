@@ -1,0 +1,97 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n;
+string arr[101];
+int row[101][101], col[101][101];
+vector<int> go[5010];
+bool visit[5010];
+int bp[5010], ROW;
+
+int dfs(int now){
+	visit[now] = true;
+
+	int len = go[now].size();
+	
+	for(int i=0;i<len;i++){
+		int su = go[now][i];
+		
+		if(bp[su] == -1 || ( visit[ bp[su] ] == false && dfs( bp[su] ) )){
+			bp[su] = now;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=0;i<n;i++){
+		cin >> arr[i];
+	}
+    int cnt =1;
+	bool check;
+	
+	for(int i=0;i<n;i++){
+		check = false;
+		for(int j=0;j<n;j++){
+			if(arr[i][j] == '.'){
+				col[i][j] = cnt;
+				check = true;
+			}
+			else{
+				if(check){
+					cnt++;
+					check = false;
+				}
+			}
+		}
+		if (check) cnt++;
+	}
+	ROW = cnt;
+	cnt = 1;
+	for(int j=0;j<n;j++){
+		check = false;
+		for(int i=0;i<n;i++){
+			if(arr[i][j] == '.'){
+				row[i][j] = cnt;
+				check = true;
+			}
+			else{
+				if(check){
+					cnt++;
+					check = false;
+				}
+			}
+		}
+		if (check) cnt++;
+	}
+
+	for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++)
+			if(row[i][j]) go[col[i][j]].push_back(row[i][j]);	
+
+	int ans=0;
+
+	memset(bp, -1 , sizeof(bp) );
+	for(int i=1;i<ROW;i++){
+		memset(visit, false , sizeof(visit) );
+		ans += dfs(i);
+	}
+	cout << ans;
+}
