@@ -1,0 +1,30 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,arr[50001];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n;
+	for(int i=0;i<n;i++) cin >> arr[i];
+	sort(arr, arr + n);
+	int maxi = arr[0];
+	for(int i=1;i<n;i++){
+		if((arr[i] / (i+1)) == 0) maxi = min(maxi, (arr[i] / (i+1))-1 );
+		else  maxi = min(maxi, (arr[i] / (i+1)) );
+	}
+	cout << maxi;
+}
