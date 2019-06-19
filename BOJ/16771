@@ -1,0 +1,66 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int barn[12], barn2[12];	// 왼쪽 통, 오른쪽 통
+bool check[2019];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    for(int i=0;i<10;i++) cin >> barn[i];
+	for(int i=0;i<10;i++) cin >> barn2[i];
+	
+	for(int i=0;i<10;i++){
+		int sum = 1000 - barn[i];
+		int imsi = barn[i];
+		barn2[10] = barn[i];			// 오른쪽 통 하나 넣어줌 
+		barn[i] = 0;				// 왼쪽 통 하나 뺌
+	
+		for(int j=0;j<=10;j++){			// 오른쪽에 통이 하나 들어가서 10까지
+			int imsi2 = barn2[j];
+			int sum2 = sum + barn2[j];
+			barn[10] = barn2[j];
+			barn2[j] = 0;
+			for(int k=0;k<=10;k++){		// 왼쪽에 통이 하나 들어가서 10까지 계산
+				if(barn[k] == 0) continue;	// 빈자리는 계산하지 않는다.
+				int imsi3 = barn[k];
+				int sum3 = sum2 - barn[k];
+				barn2[11] = barn[k];	// 오른쪽에 통 두개째 추가
+				barn[k] = 0;
+
+				for(int l=0;l<=11;l++){	// 두 개가 추가되어서 11까지 계산
+					if(barn2[l] == 0) continue;	// 빈자리는 계산하지 않는다.
+					int sum4 = sum3 + barn2[l];
+					check[sum4] = true;		// 경우의 수 추가
+				}
+				
+				barn[k] = imsi3;
+				barn2[11] = 0;
+			}
+			
+			barn2[j] = imsi2;
+			barn[10] = 0;
+		}
+						
+		barn[i] = imsi;
+		barn2[10] = 0;
+	}
+	
+	int ans = 0;
+	for(int i=0;i<=2002;i++){
+		if(check[i]) ans++;
+	}
+	cout << ans;
+}
