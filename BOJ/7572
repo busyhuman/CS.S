@@ -1,0 +1,33 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,cnt;
+string ga = "6789012345", zi = "IJKLABCDEFGH";
+vector<string> arr;
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n;
+	n %= 60;
+	while(cnt != 61){
+		string imsi = "";
+		imsi += zi[cnt % 12]; 
+		imsi += ga[cnt % 10];
+		arr.push_back( imsi );
+		cnt++;
+	}
+	cout << arr[n];
+}
