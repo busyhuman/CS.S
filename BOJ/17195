@@ -1,0 +1,107 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n;
+string arr[1001];
+
+bool checkArr(int* ansy, int* ansx){
+
+	for(int i=1;i<n;i++){
+		for(int j=1;j<n;j++){
+			int l = 0, r = 0;
+			
+			if(arr[i-1][j-1] == 'R') r++; 
+			else l++;
+			
+			if(arr[i-1][j] == 'R') r++; 
+			else l++;
+			
+			if(arr[i][j-1] == 'R') r++; 
+			else l++;
+			
+			if(arr[i][j] == 'R') r++; 
+			else l++;
+			
+			if( (l%2) == 1 || (r%2) == 1) {
+				*ansy = i;
+				*ansx = j;
+				return false;
+			}
+			
+		}
+
+		
+	}
+	return true;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n;
+	for(int i=0;i<n;i++) cin >> arr[i];
+
+	int ansy = -1, ansx = -1;
+	if( checkArr(&ansy, &ansx) ) {
+		cout << "-1";
+		return 0;
+	}
+	int y = ansy, x = ansx;
+	
+	if( arr[y-1][x-1] == 'R') arr[y-1][x-1] = 'L';
+	else arr[y-1][x-1] = 'R';
+	if (checkArr(&ansy, &ansx) ){
+		cout << y << ' ' << x;
+		return 0;
+	}
+	if( arr[y-1][x-1] == 'L') arr[y-1][x-1] = 'R';
+	else arr[y-1][x-1] = 'L';
+	
+	
+	
+	if( arr[y-1][x] == 'R') arr[y-1][x] = 'L';
+	else arr[y-1][x] = 'R';
+	if (checkArr(&ansy, &ansx) ){
+		cout << y << ' ' << x+1;
+		return 0;
+	}
+	if( arr[y-1][x] == 'L') arr[y-1][x] = 'R';
+	else arr[y-1][x] = 'L';
+	
+	
+	
+	if( arr[y][x-1] == 'R') arr[y][x-1] = 'L';
+	else arr[y][x-1] = 'R';
+	if (checkArr(&ansy, &ansx) ){
+		cout << y+1 << ' ' << x;
+		return 0;
+	}
+	if( arr[y][x-1] == 'L') arr[y][x-1] = 'R';
+	else arr[y][x-1] = 'L';
+	
+	
+	
+	if( arr[y][x] == 'R') arr[y][x] = 'L';
+	else arr[y][x] = 'R';
+	if (checkArr(&ansy, &ansx) ){
+		cout << y+1<< ' ' << x+1;
+		return 0;
+	}
+	if( arr[y][x] == 'L') arr[y][x] = 'R';
+	else arr[y][x] = 'L';
+	
+	cout << "-1";
+}
