@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,m,src, sink;
+vector< pair<int, int> > arr[10001];
+bool visit[10001];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n >> m;
+	for(int i=0;i<m;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr[x].push_back( make_pair(z, y) );
+		arr[y].push_back( make_pair(z, x) );
+	}
+	cin >> src >> sink;
+	
+	priority_queue< pair<int, int> > pq;
+	pq.push( make_pair(inf, src) );
+	visit[src]=true;
+	while( !pq.empty() ){
+		int qf = pq.top().first, qs = pq.top().second;
+
+		if(qs == sink) break;
+		pq.pop();
+		
+		if (!visit[qs]) visit[qs] = true;
+		
+		int len = arr[qs].size();
+		for(int i=0;i<len;i++){
+			int su = arr[qs][i].second;
+			if (!visit[su]) pq.push( make_pair(min(qf,arr[qs][i].first), su) );
+		}
+	}
+	cout << pq.top().first;
+}
