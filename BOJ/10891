@@ -1,0 +1,69 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int n,m;
+vector<pair<int, int>> v[100001];
+int check[100001], cactus = true;
+int parent[100001];
+void dfs(int su) {
+	int len = v[su].size();
+
+	for (int i = 0; i < len; i++) {
+		int& togo = v[su][i].first;
+        
+        // 이미 사용한 간선이면 패스
+		if (togo == -1)
+			continue;
+		
+        // 사이클이면 사이클인 check노드배열에 +1해준다.
+
+		if (check[togo] && cactus == true) {
+            int now = su;
+            do{
+                if(check[now]++ == 2){
+                    cactus = false;
+			     	return;
+                }
+                now = parent[now];
+                
+            }while(now != togo);
+        
+		     if (check[togo]++ == 2) {
+				cactus = false;
+				return;
+			}
+			v[togo][v[su][i].second].first = -1;
+			togo = -1;
+		
+			continue;
+		}
+        
+        // dfs해준다. 모든 간선을 돈다.
+		if (cactus == true) {
+			int imsi = togo;
+            parent[imsi] = su;
+			check[imsi]++;
+			v[togo][v[su][i].second].first = -1;
+			togo = -1;
+			dfs(imsi);
+		}
+
+	}
+}
+
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		int a, b;
+		scanf("%d %d", &a, &b);
+		v[a].push_back(make_pair(b, v[b].size()));
+		v[b].push_back(make_pair(a, v[a].size() - 1));
+	}
+	check[1]++;
+	dfs(1);
+	if (cactus) cout << "Cactus";
+	else cout << "Not cactus";
+}
