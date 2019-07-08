@@ -1,0 +1,58 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m;
+const int mmod = 100003;
+vector<string> arr[100005];
+long long getHash(string str){
+	int len = str.size();
+	long long res = 0;
+	long long sosu = 29;
+	for(int i=0;i<len;i++){
+		res += str[i] * sosu;
+		res %= mmod;
+		sosu *= sosu;
+		sosu %= mmod;
+	}
+	return res;
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n >> m;
+	string s;
+	int ans = 0;
+	
+	for(int i=0;i<n;i++){
+		cin >> s;
+		arr[getHash(s)].push_back(s);
+	}
+	
+	for(int i=0;i<m;i++){
+		cin >> s;
+		long long h = getHash(s);
+		int len = arr[h].size();
+		if( len ){
+			for(int j=0;j<len;j++){
+				if(s == arr[h][j]) {
+					ans++;
+					break;
+				}
+			}
+		}
+	}
+	cout << ans;
+}
