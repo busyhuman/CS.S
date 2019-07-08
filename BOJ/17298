@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n;
+stack< pair<int,int> > st;
+int ans[1000001];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int su;
+	cin >> n;
+	for(int i=0;i<n;i++){	
+		cin >> su;
+		
+		if(st.empty()){
+			st.push( make_pair(su, i) );
+		}
+		else{
+			if(st.top().first < su){
+				while(!st.empty() && st.top().first < su){
+					ans[st.top().second] = su;
+					st.pop();
+				}
+				st.push( make_pair(su, i) );
+			}
+			else
+				st.push( make_pair(su, i) );
+		}
+	}
+	
+	while( !st.empty() ){
+		ans[st.top().second] = -1;
+		st.pop();
+	}
+	
+	for(int i=0;i<n;i++) cout << ans[i] << ' ';
+}
