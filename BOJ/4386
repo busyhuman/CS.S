@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n;
+double arr[101][2];
+int parent[101];
+vector< tuple< double,int ,int > > ans;
+
+int find(int u){
+	if(u == parent[u]) return u;
+	return parent[u] = find(parent[u]);
+}
+
+void uni(int a, int b){
+	a= find(a);
+	b= find(b);
+	parent[a] = b;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n;
+	for(int i=1;i<=n;i++) parent[i] = i;
+	for(int i=0;i<n;i++) 
+		cin >> arr[i][0] >> arr[i][1];
+	
+	for(int i=0;i<n;i++){
+		for(int j=i+1;j<n;j++){
+			ans.push_back( make_tuple(sqrt( pow(arr[i][0] - arr[j][0],2) + pow(arr[i][1] - arr[j][1], 2) ),i,j ));
+		}
+	}
+	sort(ans.begin(), ans.end() );
+	int len = ans.size(),cnt=0;
+	double sum = 0;
+	for(int i=0;i<len;i++){
+		int su1 = get<1>(ans[i]), su2 = get<2>(ans[i]);
+
+		if( find(su1) != find(su2) ){
+		//	cout << su1 << ' ' << su2 << ' ' << get<0>(ans[i]) << '\n';
+			uni(su1,su2);
+			sum += get<0>(ans[i]);
+			if(++cnt == n-1) break;
+		}
+	}
+	printf("%.2lf",sum);
+}
