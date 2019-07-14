@@ -1,0 +1,95 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int T,n,m,t,s,g,h,a,b,d;
+vector< pair<int,int> > arr[2002];
+vector<int> candi;
+
+bool bfs(int start){
+	priority_queue< tuple<int,int, int> > pq;
+	pq.push( make_tuple(0, start, 0) );
+	int dist[2002]={0};
+	bool visit[2002] = {false};
+	fill(dist,dist+n+1,inf);
+	
+	dist[start] = 0;
+	int closest = inf;
+	while( !pq.empty() ){
+		int qf = -get<0>(pq.top()), qs = get<1>(pq.top()) , qt = get<2>(pq.top());	// 거리, 맞은편 정점
+		pq.pop();
+		
+		if( qs == s){
+			if(closest == inf){
+				closest = qf;
+				visit[qs] = false;
+				if(qt == 1) return true;
+				continue;
+			}
+			else{
+				if(closest < qf) break;
+				if(qt == 1) return true;
+			}
+		}
+		
+		if(	visit[qs] ) continue;
+		visit[qs] = true;
+		
+		int len = arr[qs].size();
+		for(int i=0;i<len;i++){
+			int su = arr[qs][i].first, su2 = arr[qs][i].second;
+			
+			if(dist[qs] + su <= dist[su2]){
+				dist[su2] = dist[qs] + su;
+				if( (qs == g && su2 == h) || (qs == h && su2 == g) )
+					pq.push( make_tuple(-dist[su2] , su2, 1) );	
+				else
+					pq.push( make_tuple(-dist[su2], su2, qt) );	
+			}
+		}
+	}
+	return false;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> T;
+	while(T--){
+		cin >> n >> m >> t;
+		cin >> s >> g >> h;
+		for(int i=0;i<m;i++){
+			cin >> a >> b >> d;
+			arr[a].push_back( make_pair(d, b) );
+			arr[b].push_back( make_pair(d, a) );
+		}
+		for(int i=0;i<t;i++) {
+			int imsi;
+			cin >> imsi;
+			candi.push_back(imsi);
+		}
+		sort( candi.begin(), candi.end() );
+		
+		for(int i=0;i<t;i++){
+			int ans = bfs(candi[i]);	
+			if(ans) cout << candi[i] << ' ';
+		}
+		for(int i=0;i<=n;i++)
+			arr[i].clear();
+		
+		candi.clear();
+		cout << '\n';
+	}
+}
