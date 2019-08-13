@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,q,cnt;
+bool visit[5002];
+vector< pair<int, int> > arr[5002];
+void dfs(int now, int limit){
+	int len = arr[now].size();
+	for(int i=0;i<len;i++){
+		int fir = arr[now][i].first, sec = arr[now][i].second;
+		if(visit[fir] == false && sec >= limit){
+			visit[fir] = true;
+			cnt++;
+			dfs(fir, limit);
+		}
+	}
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n >> q;
+	
+	for(int i=1;i<n;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr[x].push_back( make_pair(y,z) );
+		arr[y].push_back( make_pair(x,z) );
+	}
+	while(q--){
+		int t, v;
+		cnt = 0;
+		memset(visit, false, sizeof(visit));
+		cin >> t >> v;
+		visit[v] = true;
+		dfs(v, t);
+		cout << cnt << '\n'; 
+	}
+}
