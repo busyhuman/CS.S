@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int res,n;
+bool visit[201];
+vector< tuple<int, int, int> > arr;
+void dfs(int now){
+	int yf = get<1>(arr[now]), xf = get<0>(arr[now]), zf = get<2>(arr[now]);
+	res++;
+	for(int i=0;i<n;i++){
+		int imsiy = get<1>(arr[i]), imsix = get<0>(arr[i]);
+		if(visit[i] == false && ((yf-imsiy)*(yf-imsiy) + (xf-imsix)*(xf-imsix) <= (zf*zf) )){
+			visit[i] = true;
+			dfs(i);
+		}
+	}
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=0;i<n;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr.push_back( make_tuple(x,y,z) );
+	}
+	int ans = 0;
+	for(int i=0;i<n;i++){
+		memset(visit, false, sizeof(visit) );
+		visit[i]=true;
+		res=0;
+		dfs(i);
+		ans = max(ans,res);
+	}
+	cout << ans;
+}
