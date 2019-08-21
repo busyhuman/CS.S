@@ -1,0 +1,54 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+bool visit[17][17], arr[17][17];
+int n, dy[3] = {0,1,1}, dx[3] = {1,1,0}, ans;
+void dfs(int y, int x, int state){
+	if(y == n-1 && x == n-1){
+		ans++;
+		return;
+	}
+		
+	int stop = -1;
+	if( state == 0 )
+		stop = 2;
+	else if( state == 2 )
+		stop = 0;
+	
+	for(int i=0;i<3;i++){
+		int imsiy = y+dy[i], imsix = x+dx[i];
+		
+		if( i == stop) continue;
+		if(imsiy >= n || imsix >= n) continue;
+		if(visit[imsiy][imsix]) continue;
+		if(arr[imsiy][imsix]) continue;
+		if(i == 1 && (arr[y+1][x] || arr[y][x+1]) ) continue;
+		visit[imsiy][imsix] = true;
+		dfs(imsiy, imsix, i);
+		visit[imsiy][imsix] = false;
+	}
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++)
+			cin >> arr[i][j];
+	visit[0][1]=true;
+	dfs(0, 1, 0);
+	cout << ans;
+}
