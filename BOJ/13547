@@ -1,0 +1,63 @@
+// https://kesakiyo.tistory.com/25 참고
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, arr[100001], cnt[1000001], ans[100001], num, diffNum;
+vector< tuple<int, int ,int> > query;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n;
+	for(int i=0;i<n;i++) cin >> arr[i];
+	cin >> m;
+	for(int i=0;i<m;i++){
+		int x, y;
+		cin >> x >> y;
+		query.push_back( make_tuple(x-1,y-1,i) );
+	}
+	
+	int size = sqrt(n);
+	sort( query.begin(), query.end(), [&]( tuple<int,int,int> a, tuple<int,int,int> b){
+		int ga = get<1>(a) / size, gb = get<1>(b) / size;
+
+		if( ga == gb ) return get<0>(a) < get<0>(b);
+		else return ga < gb;
+	});
+	
+	int low = 0, high = 0;
+	if (++cnt[arr[0]] == 1) ++diffNum;
+	int len = query.size();
+	for(int i=0;i<len;i++){
+		int curLow = get<0>(query[i]), curHigh = get<1>(query[i]);
+		
+		for(int j=low;j<curLow;j++)
+			if (--cnt[arr[j]] == 0) --diffNum;
+		for(int j=low-1;j>=curLow;j--)
+			if (++cnt[arr[j]] == 1) ++diffNum;
+		for(int j=high+1;j<=curHigh;j++)
+			if (++cnt[arr[j]] == 1) ++diffNum;
+		for(int j=high;j>curHigh;j--)
+			if (--cnt[arr[j]] == 0) --diffNum;
+		
+		low = curLow;
+		high = curHigh;
+		
+		ans[get<2>(query[i])] = diffNum;
+	}
+	for(int i=0;i<m;i++)
+		cout << ans[i] << '\n';
+}
