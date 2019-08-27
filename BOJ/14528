@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, spotty[501][51], plain[501][51];
+
+bool getAns(int x, int y, int z){
+//	cout << x << ' ' << y << ' ' << z << '\n';
+	bool hash[85] = {false};
+	for(int i=0;i<n;i++)
+		hash[ spotty[i][x] + spotty[i][y]*4 + spotty[i][z]*16 ] = true;
+	for(int i=0;i<n;i++)
+		if( hash[ plain[i][x] + plain[i][y]*4 + plain[i][z]*16 ] == true )
+			return false;
+		
+	return true;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    cin >> n >> m;
+	string str;
+	for(int i=0;i<n;i++){
+		cin >> str;
+		for(int j=0;j<m;j++){
+			if(str[j] == 'A') spotty[i][j] = 1;
+			if(str[j] == 'C') spotty[i][j] = 2;
+			if(str[j] == 'G') spotty[i][j] = 3;
+			if(str[j] == 'T') spotty[i][j] = 4;
+		}
+	}
+	for(int i=0;i<n;i++){
+		cin >> str;
+		for(int j=0;j<m;j++){
+			if(str[j] == 'A') plain[i][j] = 1;
+			if(str[j] == 'C') plain[i][j] = 2;
+			if(str[j] == 'G') plain[i][j] = 3;
+			if(str[j] == 'T') plain[i][j] = 4;
+		}
+	}
+	
+	int ans = 0;
+	for(int i=0;i<m;i++)
+		for(int j=i+1;j<m;j++)
+			for(int k=j+1;k<m;k++)
+				ans += getAns(i, j, k);
+	cout << ans;
+}
