@@ -1,0 +1,49 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n;
+bool check[100001];
+vector<int> elssie, bessie;
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=0;i<n;i++){
+		int su;
+		cin >> su;
+		elssie.push_back(su);
+		check[su] = true;
+	}
+	for(int i=1;i<=n*2;i++){
+		if(check[i] == false)
+			bessie.push_back(i);
+	}
+	sort(elssie.begin(), elssie.end() );
+	
+	int l=0,r=0,ans=0;
+	while(l<n && r<n){
+	//	cout << elssie[l] << ' ' << bessie[r] << '\n';
+		if( elssie[l] < bessie[r]){
+			r++;
+			l++;
+			ans++;
+		}
+		else{
+			r++;	
+		}
+	}
+	cout << ans;
+}
