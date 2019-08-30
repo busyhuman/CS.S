@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, k, dist[100001], dist2[100001];
+map< pair<int, int>,int > edge;
+vector<int> arr[100001];
+vector< pair<int, int> > grass;
+
+void getAns(int start){
+	priority_queue< pair<int,int> > pq;
+	pq.push( make_pair(0, start) );
+	
+	while( !pq.empty() ){
+		int qs = pq.top().second;
+		int len = arr[qs].size();
+		pq.pop();
+		for(int i=0;i<len;i++){
+			int su1 = arr[qs][i], su2 = edge[make_pair(qs,su1)];
+
+			if(dist[su1] == 0 || (dist[qs] + su2 < dist[su1]) ){
+				dist[su1] = dist[qs] + su2;
+				pq.push( make_pair(-dist[su1], su1) );
+			}
+		}
+	}
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m >> k;
+	for(int i=0;i<m;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr[x].push_back(y);
+		arr[y].push_back(x);
+		edge[make_pair(x,y)] = z;
+		edge[make_pair(y,x)] = z;
+	}
+	for(int i=0;i<k;i++){
+		int x, z;
+		cin >> x >> z;
+		grass.push_back( make_pair(x,z) );
+	}
+	
+	// 목적지인 n에서 각 지점까지 거리 계산
+	getAns(n);
+	
+	for(int i=1;i<=n;i++)
+		dist2[i] = dist[i];
+	
+	// 반드시 거쳐야하는 곳들을 적용시킨 시작점을 만들어줌 (0)
+	for(int i=0;i<k;i++){
+		arr[0].push_back( grass[i].first);
+		edge[ make_pair(0,grass[i].first)] = dist[grass[i].first] - grass[i].second;
+	}
+	memset(dist, 0, sizeof(dist) );
+	
+	// 인위로 만든 시작점인 0부터 시작
+	getAns(0);
+
+	for(int i=1;i<n;i++){
+		if( dist[i] <= dist2[i]) cout << "1\n";
+		else cout << "0\n";
+	}
+}
