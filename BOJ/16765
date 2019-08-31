@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, k, arr[10001], dp[100001];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> k;
+	for(int i=0;i<n;i++) cin >> arr[i];
+	int maxi = arr[0];
+	for(int i=0;i<k;i++){
+		maxi = max(maxi,arr[i]);
+		dp[i] = max(dp[i], maxi*(i+1) );
+	//	cout << dp[i] << '\n';
+	}
+	for(int i=k;i<n;i++){
+		maxi = arr[i];
+		for(int j=i;j>i-k;j--){
+			maxi = max(maxi, arr[j]);
+			dp[i] = max(dp[i], dp[j-1]+maxi*(i-j+1));
+			
+		}
+	//	cout << dp[i] << '\n';
+	}
+	cout << dp[n-1];
+}
