@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,m,T,cow[10001], path[10001], ans[10001];
+vector< pair<int,long long> > arr[10001];
+long long dist[10001],maxi;
+void dijkstra(){
+	memset(dist, -1 ,sizeof(dist) );
+	priority_queue< pair<int, int> > pq;
+	pq.push( make_pair(0,1) );
+	path[1] = -1;
+	dist[1] = 0;
+	
+	while( !pq.empty() ){
+		int qs = pq.top().second;
+		pq.pop();
+		int len = arr[qs].size();
+		for(int i=0;i<len;i++){
+			int su1 = arr[qs][i].first, su2 = arr[qs][i].second;
+			if( dist[su2] == -1 || dist[qs] + su1 < dist[su2]){
+				dist[su2] = dist[qs] + su1;
+				path[su2] = qs;
+				pq.push( make_pair(-dist[su2], su2) );
+			}
+			else if(dist[qs] + su1 == dist[su2] && path[su2] > qs){
+				dist[su2] = dist[qs] + su1;
+				path[su2] = qs;
+				pq.push( make_pair(-dist[su2], su2) );
+			}
+		}
+	}
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m >> T;
+	for(int i=1;i<=n;i++) cin >> cow[i];
+	for(int i=0;i<m;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr[x].push_back( make_pair(z,y) );
+		arr[y].push_back( make_pair(z,x) );
+	}
+
+	dijkstra();
+	
+	for(int i=1;i<=n;i++){
+		int now = i;
+		while(now != -1){
+			ans[now] += cow[i];
+			now = path[now];
+		}
+	}
+	
+	maxi = 0;
+	for(int i=1;i<=n;i++)
+		maxi = max(maxi, ans[i]*(dist[i]-T));
+	cout << maxi;
+}
