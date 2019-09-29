@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, h, mini = inf, ans,su;
+vector<int> arr, brr;
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> h;
+	for(int i=0;i<n;i++){
+		cin >> su;
+		if( (i%2) == 0) arr.push_back(su);
+		else brr.push_back(su);
+	}
+	int len = arr.size();
+	sort(arr.begin(), arr.end() );
+	sort(brr.begin(), brr.end() );
+    
+	for(int i=1;i<=h;i++){
+		int cnt1 = lower_bound(arr.begin(), arr.end(), i) - arr.begin();
+		cnt1 = len - cnt1;
+		int cnt2 = brr.end() - lower_bound(brr.begin(), brr.end(), h-i+1);
+		mini = min(mini, cnt1+cnt2);
+	}
+	for(int i=1;i<=h;i++){
+		int cnt1 = lower_bound(arr.begin(), arr.end(), i) - arr.begin();
+		cnt1 = len - cnt1;
+		int cnt2 = brr.end() - lower_bound(brr.begin(), brr.end(), h-i+1);
+		if( cnt1 + cnt2 == mini) ans++;
+	}
+	cout << mini << ' ' << ans;
+}
