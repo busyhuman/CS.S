@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+queue<long long> q,l;
+map<long long, bool> dict;
+long long a, b;
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> a >> b;
+	q.push(a);
+	l.push(1);
+	dict[a] = true;
+	while(!q.empty()){
+		long long qf = q.front(), lf = l.front();
+	//	cout << qf << '\n';
+		q.pop(), l.pop();
+		if( qf == b){
+			cout << lf;
+			return 0;
+		}
+		if( qf*2 <= b && dict[qf*2] == false){
+			dict[qf*2] = true;
+			q.push(qf*2);
+			l.push(lf+1);
+		}
+		if( qf*10+1 <= b && dict[qf*10+1] == false){
+			dict[qf*10+1] = true;
+			q.push(qf*10+1);
+			l.push(lf+1);
+		}
+	}
+	cout << "-1";
+}
