@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, q, ans[100001], parent[100001], sz[100001];
+vector< tuple<int,int,int> > arr, query;
+
+bool comp(tuple<int,int,int> a, tuple<int,int,int> b){
+	return get<0>(a) > get<0>(b);
+}
+int find(int u){
+	if( u == parent[u]) return u;
+	return parent[u] = find(parent[u]);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> q;
+	for(int i=1;i<=n;i++) parent[i] = i;
+	for(int i=1;i<n;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr.push_back( make_tuple(z,x,y) );
+	}
+	sort( arr.begin(), arr.end(), comp);
+	
+	for(int i=0;i<q;i++){
+		int k, v;
+		cin >> k >> v;
+		query.push_back( make_tuple(k,v,i) );
+	}
+	sort( query.begin(), query.end() ,comp);
+	
+	int index = 0;
+	for(int i=0;i<q;i++){
+		int k = get<0>(query[i]), v = get<1>(query[i]), idx = get<2>(query[i]),a ,b;
+		
+		while(index < n-1 && get<0>(arr[index]) >= k){
+			a = find(get<1>(arr[index]));
+			b = find(get<2>(arr[index]));
+			parent[a] = b;
+			sz[b] += sz[a] + 1;
+			index++;
+		}
+		ans[idx] = sz[find(v)];
+	}
+	for(int i=0;i<q;i++) cout << ans[i] << '\n';
+}
