@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+bool check[1003002];
+vector<int> arr;
+int n;
+
+bool isPellin(int su){
+	string str = "";
+	while(su){
+		int d = su % 10;
+		str = (char)(d+'0') + str;
+		su /= 10;
+	}
+	int len = str.size();
+	for(int i=0;i<len/2;i++){
+		if(str[i] != str[len-i-1]) return false;
+	}
+	return true;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int n;
+	cin >> n;
+	check[1] = true;
+	for(int i=2;i<=1000;i++){
+		if(check[i] == false)
+			for(int j=i+i;j<=1003001;j+=i)
+				check[j] = true;
+	}
+	check[2] = false;
+	for(int i=n;i<=1003001;i++)
+		if( !check[i] ) 
+			arr.push_back(i);
+	
+	for(int su : arr){
+		if(isPellin(su)){
+			cout << su;
+			break;
+		}
+	}
+}
