@@ -1,0 +1,58 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,m,stone[1000001],su1,su2;
+long long k,sum;
+vector< pair<int,int> > imsi,arr;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m >> k;
+	for(int i=1;i<=n;i++) cin >> stone[i];
+	for(int i=0;i<m;i++){
+		int x, y;
+		cin >> x >> y;
+		imsi.push_back( make_pair(x,y) );
+	}
+	
+	// 공사구간이 1이하면 무조건 YES
+	if( m<=1 ){
+		cout << "YES";
+		return 0;
+	}
+	sort( imsi.begin(), imsi.end() );
+	
+	// 원형큐에서 인덱스를 넘어가는 경우가 딱 한 번 생길 수 있다.
+	if(imsi[0].first >= imsi[m-1].second)
+		arr.push_back( make_pair(imsi[m-1].second, imsi[0].first) );
+	else{
+		int mini = inf;
+		for(int i=1;i<=imsi[0].first;i++) mini = min(mini, stone[i]);
+		for(int i=imsi[m-1].second;i<=n;i++) mini = min(mini, stone[i]);
+		sum += mini;
+	}
+	for(int i=1;i<m;i++) arr.push_back( make_pair(imsi[i-1].second, imsi[i].first) );
+	
+	int len = arr.size();
+	for(int i=0;i<len;i++){
+		int x = arr[i].first, y = arr[i].second, mini = inf;
+		for(int j=x;j<=y;j++) mini = min(mini, stone[j]);
+		sum += mini;
+	}
+	if( sum <= k ) cout << "YES";
+	else cout << "NO";
+}
