@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, check[27];
+string str;
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	cin.ignore(1);
+	for(int tc=1;tc<=n;tc++){
+		getline(cin, str);
+		memset(check,0,sizeof(check));
+		
+		int len = str.size();
+		for(int i=0;i<len;i++){
+			if(str[i] >= 'a' && str[i] <= 'z') check[str[i] - 'a']++;
+			else if(str[i] >= 'A' && str[i] <= 'Z') check[str[i] - 'A']++;
+		}
+		int cnt[4]={0};
+		for(int i=0;i<=25;i++){
+			if(check[i] >= 3) cnt[3]++;
+			if(check[i] >= 2) cnt[2]++;
+			if(check[i] >= 1) cnt[1]++;
+			if(check[i] == 0) cnt[0]++;
+		}
+		cout << "Case " << tc << ": ";
+		if(cnt[0]) cout << "Not a pangram";
+		else if(cnt[3] == 26) cout << "Triple pangram!!!";
+		else if(cnt[2] == 26) cout << "Double pangram!!";
+		else if(cnt[1] == 26) cout << "Pangram!";
+		cout << '\n';
+	}
+}
