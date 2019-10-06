@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+long long ans;
+int n, parent[100001];
+vector< tuple<int, int, int, int> > arr;
+vector< tuple<int, int, int> > candi;
+bool compx(tuple<int,int,int,int> a, tuple<int, int, int, int> b){
+    return get<0>(a) < get<0>(b);
+}
+bool compy( tuple<int, int, int, int> a, tuple<int, int, int, int> b){
+    return get<1>(a) < get<1>(b);
+}
+bool compz( tuple<int, int, int, int> a, tuple<int, int, int, int> b){
+    return get<2>(a) < get<2>(b);
+}
+int find(int u){
+	if(u == parent[u]) return u;
+	return parent[u] = find(parent[u]);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=1;i<=n;i++) parent[i] = i;
+	for(int i=1;i<=n;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr.push_back( make_tuple(x,y,z,i) );
+	}
+	
+	sort(arr.begin(), arr.end(), compx );
+	for(int i=1;i<n;i++) candi.push_back( make_tuple( abs(get<0>(arr[i]) - get<0>(arr[i-1])), get<3>(arr[i-1]), get<3>(arr[i]) ));
+	sort(arr.begin(), arr.end(), compy );
+	for(int i=1;i<n;i++) candi.push_back( make_tuple( abs(get<1>(arr[i]) - get<1>(arr[i-1])), get<3>(arr[i-1]), get<3>(arr[i]) ));
+	sort(arr.begin(), arr.end(), compz );
+	for(int i=1;i<n;i++) candi.push_back( make_tuple( abs(get<2>(arr[i]) - get<2>(arr[i-1])), get<3>(arr[i-1]), get<3>(arr[i]) ));
+	
+	sort(candi.begin(), candi.end() );
+	int len = candi.size();
+	for(int i=0;i<len;i++){
+		int su1 = get<0>(candi[i]), su2 = get<1>(candi[i]), su3 = get<2>(candi[i]);
+		int a = find(su2), b = find(su3);
+		if( a != b ){
+			parent[a] = b;
+			ans += su1;
+		}
+	}
+	cout << ans;
+}
