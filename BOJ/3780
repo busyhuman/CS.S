@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int TC, n, a, b, parent[20001], dist[20001];
+char order;
+int find(int u){
+	if( u == parent[u]) return u;
+	else {
+		int imsi = find(parent[u]);
+		dist[u] += dist[parent[u]];
+		return parent[u] = imsi;
+	}
+}
+void uni(int a, int b){
+	dist[a] = abs(a-b) % 1000;
+	parent[a] = b;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> TC;
+	
+	while(TC--){
+		cin >> n;
+		for(int i=1;i<=n;i++) parent[i] = i;
+		memset(dist, 0, sizeof(dist) );
+		while(true){
+			cin >> order;
+			int a, b;
+			if( order == 'E') {
+				cin >> a;
+				find(a);
+				cout << dist[a] << '\n';
+			}
+			else if( order == 'I'){
+				cin >> a >> b;
+				uni(a, b);
+			}
+			else
+				break;
+		}
+	}
+}
