@@ -1,0 +1,80 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, p, S=1, E=2, ans, level[401];
+vector< tuple<int,int,int> > arr[401];
+
+bool bfs(){
+	memset(level, -1 ,sizeof(level) );
+	queue<int> q;
+	level[S] = 0;
+	q.push(S);
+	
+	while( !q.empty() ){
+		int qf = q.front();
+		q.pop();
+		int len = arr[qf].size();
+		
+		for(int i=0;i<len;i++){
+			int togo = get<0>(arr[qf][i]), size = get<1>(arr[qf][i]);
+			if( level[togo] == -1 && size > 0){
+				level[togo] = level[qf] + 1;
+				q.push(togo);
+			}
+		}
+	}
+	return (level[E] != -1);
+}
+
+int dfs(int now, int curcap){
+	if( now == E) return curcap;
+	int len = arr[now].size();
+	
+	for(int i=0;i<len;i++){
+		int togo = get<0>(arr[now][i]), tocap = get<1>(arr[now][i]);
+		
+		if(level[now]+1 == level[togo] && tocap > 0){
+			bool flow = dfs(togo, min(curcap, tocap) );
+			
+			if( flow > 0 ){
+				get<1>(arr[now][i]) -= flow;
+				get<1>(arr[togo][get<2>(arr[now][i])]) += flow;
+				return flow;
+			}
+		}
+	}
+	return 0;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> p;
+	for(int i=0;i<p;i++){
+		int x, y;
+		cin >> x >> y;
+		arr[x].push_back( make_tuple(y, 1, arr[y].size()) );
+		arr[y].push_back( make_tuple(x, 0, arr[x].size()-1) );
+	}
+	while( bfs() ){
+		while(true){
+			bool flow = dfs(S, inf);
+			if( !flow ) break;
+			ans += flow;
+		}
+	}
+	cout << ans;
+}
