@@ -1,0 +1,112 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, k, arr[100001];
+vector<int> tree, tree2;
+void init(int node, int left, int right){
+	if(left == right){
+		if( arr[left] == 0) tree[node] = 1;
+		else tree[node] = 0;
+		return;
+	}
+	init(node*2,left,(left+right)/2 );
+	init(node*2+1,(left+right)/2+1,right);
+	tree[node] = tree[node*2] + tree[node*2+1];
+}
+void init2(int node, int left, int right){
+	if(left == right){
+		if( arr[left] < 0) tree2[node] = 1;
+		else tree2[node] = 0;
+		return;
+	}
+	init2(node*2,left,(left+right)/2 );
+	init2(node*2+1,(left+right)/2+1,right);
+	tree2[node] = tree2[node*2] + tree2[node*2+1];
+}
+
+void update(int node, int start, int end, int idx, int su){
+	if( start > idx || end < idx ) return;
+	if( start == end){
+		tree[node] = su;
+		return;
+	}
+	update(node*2, start, (start+end)/2, idx, su);
+	update(node*2+1, (start+end)/2+1,end, idx, su);
+	tree[node] = tree[node*2] + tree[node*2+1];
+}
+
+void update2(int node, int start, int end, int idx, int su){
+	if( start > idx || end < idx ) return;
+	if( start == end){
+		tree2[node] = su;
+		return;
+	}
+	update2(node*2, start, (start+end)/2, idx, su);
+	update2(node*2+1, (start+end)/2+1,end, idx, su);
+	tree2[node] = tree2[node*2] + tree2[node*2+1];
+}
+
+int query(int node, int start, int end, int left, int right){
+	if( start > right || end < left ) return 0;
+	if( left <= start && end <= right) return tree[node];
+	return query(node*2, start, (start+end)/2, left, right) + query(node*2+1, (start+end)/2+1,end,left,right);
+}
+
+int query2(int node, int start, int end, int left, int right){
+	if( start > right || end < left ) return 0;
+	if( left <= start && end <= right) return tree2[node];
+	return query2(node*2, start, (start+end)/2, left, right) + query2(node*2+1, (start+end)/2+1,end,left,right);
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
+	while( cin >> n >> k ){
+		tree.resize(400004);
+		tree2.resize(400004);
+		for(int i=1;i<=n;i++) cin >> arr[i];
+		init(1,1,n);
+		init2(1,1,n);
+		while(k--){
+			char order;
+			int x, y;
+			cin >> order >> x >> y;
+
+			if( order == 'C'){
+
+				if(y == 0) {	
+					update(1,1,n,x,1);
+					update2(1,1,n,x,0);
+				}
+				else if(y < 0){
+					update(1,1,n,x,0);
+					update2(1,1,n,x,1);
+				}
+				else{
+					update(1,1,n,x,0);
+					update2(1,1,n,x,0);
+				}
+			}
+			else if( order == 'P'){
+			//	cout << query(1,1,n,x,y) << ' ' << query2(1,1,n,x,y) << ' ';
+				if( query(1,1,n,x,y) ) cout << "0";
+				else if( (query2(1,1,n,x,y) % 2 == 1) ) cout << "-";
+				else cout << "+";
+			}
+		}
+		cout << '\n';
+	}
+}
