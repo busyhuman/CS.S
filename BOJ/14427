@@ -15,7 +15,6 @@ using namespace std;
 #define inf 2000000000
 #define mod 1000000007
 int n,m,arr[100001];
-vector<int> ans;
 vector<pair<int,int>> tree;
 void init(int node, int start, int end){
 	if( start == end){
