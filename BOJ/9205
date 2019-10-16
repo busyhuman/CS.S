@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int T,n,dx,dy,dp[102];
+bool ans;
+vector< pair<int,int> > arr;
+const int THOUSAND = 1000;
+void dfs(int now, int x, int y){
+	if( x == dx && y == dy){
+		ans = true;
+		return;
+	}
+
+	for(int i=1;i<=n+1;i++){
+		if( i == now) continue;
+		int dist = abs(arr[i].first - x) + abs(arr[i].second - y);
+		if(dp[i] > dp[now]+dist && dist <= THOUSAND){
+			dp[i] = dp[now] + dist;
+			dfs(i, arr[i].first, arr[i].second);
+		}
+	}
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> T;
+	while(T--){
+		cin >> n;
+		for(int i=1;i<=n+1;i++) dp[i] = inf;
+		for(int i=0;i<=n+1;i++){
+			int x, y;
+			cin >> x >> y;
+			arr.push_back( make_pair(x,y) );
+			dx = x;
+			dy = y;
+		}
+		
+		dfs(0,arr[0].first,arr[0].second); 
+		if(ans) cout << "happy\n";
+		else cout << "sad\n";
+		ans = false;
+		arr.clear();
+	}
+}
