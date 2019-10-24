@@ -1,0 +1,73 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int T,n,a,b,dp[2000002];
+bool check[1000002]={false};
+void bfs(){
+	queue<int> q;
+	q.push(n);
+	
+	while( !q.empty() ){
+		int qf = q.front();
+		q.pop();
+		if(qf < 1) continue;
+		
+		if(dp[qf+1] == -0 || dp[qf+1] > dp[qf]+1){
+			dp[qf+1] = dp[qf]+1;
+			q.push(qf+1);
+		}
+		if(dp[qf-1] == 0 || dp[qf-1] > dp[qf]+1){
+			dp[qf-1] = dp[qf]+1;
+			q.push(qf-1);
+		}if(dp[qf/2] == 0 || dp[qf/2] > dp[qf]+1){
+			dp[qf/2] = dp[qf]+1;
+			q.push(qf/2);
+		}
+		if(dp[qf/3] == 0 || dp[qf/3] > dp[qf]+1){
+			dp[qf/3] = dp[qf]+1;
+			q.push(qf/3);
+		}
+	}
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> T;
+	for(int i=2;i<=1000;i++){
+		if(check[i] == false){
+			for(int j=i+i;j<=1000000;j+=i)
+				check[j] = true;
+		}
+	}
+	while(T--){
+		cin >> n >> a >> b;
+		if(a <= n && n <= b && check[n] == false){
+			cout << "0\n";
+			continue;
+		}
+
+		memset(dp, 0, sizeof(dp) );
+		bfs();
+		int mini = inf;
+		check[2] =false;
+		for(int i=a;i<=b;i++) {
+			if(dp[i] == 0) continue;
+			if(check[i] == false) mini = min(mini, dp[i]);
+		}
+		if(mini == inf) cout << "-1\n";
+		else cout << mini << '\n';
+	}
+}
