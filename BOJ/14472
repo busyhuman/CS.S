@@ -1,0 +1,49 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, d, ans;
+string arr[101];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m >> d;
+	for(int i=0;i<n;i++) cin >> arr[i];
+	for(int i=0;i<n;i++){
+		for(int j=d;j<=m;j++){
+			bool check = true;
+			for(int k=j-d;k<j;k++){
+				if(arr[i][k] == '#') {
+					check = false;
+					break;
+				}
+			}
+			if( check ) ans++;
+		}
+	}
+	for(int i=d;i<=n;i++){
+		for(int j=0;j<m;j++){
+			bool check = true;
+			for(int k=i-d;k<i;k++){
+				if(arr[k][j] == '#') {
+					check = false;
+					break;
+				}
+			}
+			if( check ) ans++;
+		}
+	}
+	cout << ans;
+}
