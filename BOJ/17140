@@ -1,0 +1,110 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int r,c,k,h=3,w=3,ans, Count[101], arr[1001][1001],ROW[101],COL[101];
+bool getAns(){
+	return arr[r][c] == k;
+}
+
+int makeRow(int row){
+	for(int i=0;i<w;i++){
+		Count[ arr[row][i] ]++;
+	}
+	vector< pair<int, int> > imsi;
+	for(int i=1;i<=100;i++){
+		if( Count[i] == 0) continue;
+		imsi.push_back( make_pair(Count[i], i) );
+	}
+	sort(imsi.begin(), imsi.end());
+	int len = imsi.size();
+	len = min(len,50);
+	for(int i=0;i<len*2;i++) arr[row][i] = 0;
+	for(int i=0;i<len;i++){
+		arr[row][i*2] = imsi[i].second;
+		arr[row][i*2+1] = imsi[i].first;
+	}
+	ROW[row] = len*2;
+	return len*2;
+}
+
+void doR(){
+	int maxlen = 0;
+	for(int i=0;i<h;i++){
+		maxlen = max(maxlen,makeRow(i) );
+		memset(Count, 0, sizeof(Count) );
+	}
+	for(int i=0;i<h;i++){
+		for(int j=ROW[i];j<maxlen;j++)
+			arr[i][j] = 0;
+	}
+	memset(ROW, 0, sizeof(ROW) );
+	w = maxlen;
+}
+
+int makeCol(int col){
+	for(int i=0;i<h;i++){
+		Count[ arr[i][col] ]++;
+	}
+	vector< pair<int, int> > imsi;
+	for(int i=1;i<=100;i++){
+		if( Count[i] == 0) continue;
+		imsi.push_back( make_pair(Count[i], i) );
+	}
+	sort(imsi.begin(), imsi.end());
+	int len = imsi.size();
+	len = min(len,50);
+	for(int i=0;i<len*2;i++) arr[i][col] = 0;
+	for(int i=0;i<len;i++){
+		arr[i*2][col] = imsi[i].second;
+		arr[i*2+1][col] = imsi[i].first;
+	}
+	COL[col] = len*2;
+	return len*2;
+}
+
+void doC(){
+	int maxlen = 0;
+	for(int i=0;i<w;i++){
+		maxlen = max(maxlen,makeCol(i) );
+		memset(Count, 0, sizeof(Count) );
+	}
+	for(int i=0;i<w;i++){
+		for(int j=COL[i];j<maxlen;j++)
+			arr[j][i] = 0;
+	}
+	memset(COL, 0, sizeof(COL) );
+	h = maxlen;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> r >> c >> k;
+	r--,c--;
+	for(int i=0;i<3;i++)
+		for(int j=0;j<3;j++)
+			cin >> arr[i][j];
+	
+	while(true){
+		if( getAns() ) break;
+		if(++ans > 100){
+			ans = -1;
+			break;
+		}
+		h >= w ? doR() : doC();
+	}
+	cout << ans;
+}
