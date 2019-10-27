@@ -1,0 +1,70 @@
+// https://jaimemin.tistory.com/1154 에서 좌표압축 알고리즘을 참고
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,dp[1001][1001],ans=inf;
+bool arr[1001][1001];
+set<int> ySet, xSet;
+map<int,int> yHash, xHash;
+vector< pair<int,int> > points;
+
+// 구간의 합 추출
+int calc(int y1, int x1, int y2, int x2){
+	return dp[y2][x2] - dp[y1][x2] - dp[y2][x1] + dp[y1][x1];
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=0;i<n;i++) {
+		int y, x;
+		cin >> y >> x;
+		points.push_back( make_pair(y,x) );
+		
+		// 중복 제거
+		ySet.insert(y);
+		xSet.insert(x);
+	}
+	// ySize, xSize
+	int cnt1=0, cnt2=0;
+	
+	// y,x좌표에 인덱싱
+	for(int y : ySet)
+		yHash[y] = cnt1++;
+	for(int x : xSet)
+		xHash[x] = cnt2++;
+	
+	// 농장에 소 표시
+	for(int i=0;i<n;i++)
+		arr[yHash[points[i].first]][xHash[points[i].second]] = true;
+	
+	// 2차원 구간합 DP
+	for(int i=1;i<=cnt1;i++)
+		for(int j=1;j<=cnt2;j++)
+			dp[i][j] = dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1] + arr[i-1][j-1];
+	
+	 for(int i=0;i<cnt1;i++){
+		 for (int j=0;j<cnt2;j++){
+			 // 1사분면 -> 4사분면 순서대로
+			 int maxi = calc(0,0,i,j);
+			 maxi = max(maxi, calc(0,j,i,cnt2));
+			 maxi = max(maxi, calc(i,0,cnt1,j));
+			 maxi = max(maxi, calc(i,j,cnt1,cnt2));
+			 ans = min(ans,maxi);
+		 }
+	 }
+	cout << ans;
+}
