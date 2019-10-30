@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int a,b,k,m,ans=inf;
+bool visit[201][201];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> a >> b >> k >> m;
+	queue<int> x,y,l;
+	x.push(0);
+	y.push(0);
+	l.push(0);
+	visit[0][0] = true;
+	while( !x.empty() ){
+		int xf = x.front(), yf = y.front(), lf = l.front();
+		x.pop(), y.pop(), l.pop();
+	//	cout << xf << ' ' << yf << ' ' << lf << ' ' << abs(xf+yf-m) << '\n';
+		ans = min(ans, abs(xf+yf-m) );
+		if(lf == k) continue;
+		if( visit[a][yf] == false && xf < a ){
+			visit[a][yf] = true;
+			x.push(a);
+			y.push(yf);
+			l.push(lf+1);
+		}
+		
+		if( visit[xf][b] == false && yf < b ){
+			visit[xf][b] = true;
+			x.push(xf);
+			y.push(b);
+			l.push(lf+1);
+		}
+
+		if( visit[xf][0] == false){
+			visit[xf][0] = true;
+			x.push(xf);
+			y.push(0);
+			l.push(lf+1);
+		}
+		
+		if( visit[0][yf] == false){
+			visit[0][yf] = true;
+			x.push(0);
+			y.push(yf);
+			l.push(lf+1);
+		}
+		
+		int mini = min(xf, b-yf);
+		if( visit[xf-mini][yf+mini] == false ){
+			visit[xf-mini][yf+mini] = true;
+			x.push(xf-mini);
+			y.push(yf+mini);
+			l.push(lf+1);
+		}
+		
+		mini = min(a-xf, yf);
+		if( visit[xf+mini][yf-mini] == false ){
+			visit[xf+mini][yf-mini] = true;
+			x.push(xf+mini);
+			y.push(yf-mini);
+			l.push(lf+1);
+		}
+	}
+	cout << ans;
+}
