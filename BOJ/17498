@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m, d;
+vector<int> arr[200001],dp[200001];
+void make(int a, int b){
+	int s = max(1,a-10), s2 = max(0,b-10), s3 = min(m,b+10);
+	for(int i=s;i<a;i++){
+		for(int j=s2;j<s3;j++){
+			int su = a-i + abs(j-b);
+			if( su > d ) continue;
+			
+			dp[a][b] = max(dp[a][b], dp[i][j] + arr[i][j] * arr[a][b]);
+		}
+	}
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> m >> d;
+	for(int i=1;i<=n;i++){
+		for(int j=0;j<m;j++){
+			int su;
+			cin >> su;
+			arr[i].push_back(su);
+			dp[i].push_back(-inf);
+		}
+	}
+	
+	for(int i=0;i<m;i++) dp[1][i] = 0;
+	for(int i=2;i<=n;i++)
+		for(int j=0;j<m;j++)
+			make(i,j);
+
+	int ans = -inf;
+	for(int i=0;i<m;i++) ans = max(ans, dp[n][i]);
+	cout << ans;
+}
