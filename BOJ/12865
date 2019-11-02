@@ -1,0 +1,28 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, k, w[101], v[101], dp[101][100001];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> k;
+	for(int i=1;i<=n;i++) cin >> w[i] >> v[i];
+	for(int i=1;i<=n;i++){
+		for(int j=0;j<w[i];j++) dp[i][j] = dp[i-1][j];
+		for(int j=w[i];j<=k;j++) dp[i][j] = max(dp[i-1][j], max(dp[i][j], dp[i-1][j-w[i]] + v[i]) );
+	}
+	cout << dp[n][k];
+}
