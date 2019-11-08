@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,s,e,m;
+long long dist[101],wage[101];
+bool visit[101];
+vector< pair<int,int> > arr[101];
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> s >> e >> m;
+	for(int i=0;i<m;i++){
+		int x, y, z;
+		cin >> x >> y >> z;
+		arr[x].push_back( make_pair(y,z) );
+	}
+	for(int i=0;i<n;i++){ 
+		cin >> wage[i];
+		dist[i] = inf;
+	}
+	dist[s] = -wage[s];
+	queue<int> q;
+	for(int k=0;k<n;k++){
+		for(int i=0;i<n;i++){
+			if(dist[i] == inf) continue;
+			int len = arr[i].size();
+			for(int j=0;j<len;j++){
+				int su1 = arr[i][j].first, su2 = arr[i][j].second;
+				if( dist[su1] > dist[i] + su2 - wage[su1]){
+					dist[su1] = dist[i] + su2 - wage[su1];
+					if( k == n-1)
+						q.push(i);
+				}
+			}
+		}	
+	}
+	
+	while( !q.empty() ){
+		int qf = q.front();
+		q.pop();
+		if(visit[qf]) continue;
+		visit[qf] = true;
+		if( qf == e){
+			cout << "Gee";
+			return 0;
+		}
+		int len = arr[qf].size();
+		for(int i=0;i<len;i++){
+			int su = arr[qf][i].first;
+			q.push(su);
+		}
+	}
+	if( dist[e] == inf) cout << "gg";
+	else cout << -dist[e];
+}
