@@ -1,0 +1,62 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m,num;
+string str;
+vector<int> arr[27];
+map<string, int> dict;
+
+bool getAns(int su1, int su2){
+	bool check1=false,check2=false,check3=false;
+	for(int i=0;i<n;i++){
+		int len = arr[i].size();
+		bool check4 = false, check5 = false;
+		for(int j=0;j<len;j++){
+			int imsi = arr[i][j];
+			if( imsi == su1) check4 = true;
+			if( imsi == su2) check5 = true;
+		}
+		if( check4 && check5) check1 = true;
+		else if( check4 ) check2 = true;
+		else if( check5 ) check3 = true;
+	}
+//	cout << check1 << ' ' << check2 << ' ' << check3 << '\n';
+	if( check1 && check2 && check3) return false;
+	return true;
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=0;i<n;i++){
+		cin >> m;
+		for(int j=0;j<m;j++){
+			cin >> str;
+			if(dict[str] == 0) dict[str] = ++num;
+			arr[i].push_back(dict[str]);
+		}
+	}
+	
+	for(int i=1;i<num;i++){
+		for(int j=i+1;j<=num;j++){
+			if( getAns(i,j) == false ){
+				cout << "no";
+				return 0;
+			}
+		}
+	}
+	cout << "yes";
+}
