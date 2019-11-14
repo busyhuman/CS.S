@@ -1,0 +1,110 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, m;
+int arr[1000001];
+vector< tuple<long long, long long ,long long, long long> > tree;	// max, max2, cntmax, sum
+void lazy(int node, int start, int end){
+	if( start == end) return;
+	long long a=get<0>(tree[node]), &b=get<0>(tree[node*2]), &c = get<3>(tree[node*2]);
+	if( a < b){
+		c -= get<2>(tree[node*2])*(b-a);
+		b = a;
+	}
+	long long &d=get<0>(tree[node*2+1]), &e = get<3>(tree[node*2+1]);
+	if( a < d){
+		e -= get<2>(tree[node*2+1])*(d-a);
+		d = a;
+	}
+}
+
+void updateMin(int node, int start, int end, int left, int right, long long val){
+	lazy(node, start, end);
+	if(start > right || end <left || get<0>(tree[node]) <= val) return;
+	if(left <= start && end <= right && get<1>(tree[node]) < val){
+		long long &a = get<3>(tree[node]), &b = get<0>(tree[node]);
+		a -= get<2>(tree[node]) * (b - val);
+		b = val;
+		lazy(node, start, end);
+		return;
+	}
+	updateMin(node*2, start, (start+end)/2, left, right, val);
+	updateMin(node*2+1, (start+end)/2+1, end, left, right, val);
+	long long a = get<0>(tree[node*2]), b = get<0>(tree[node*2+1]), c = get<1>(tree[node*2]), d = get<1>(tree[node*2+1]), e = get<2>(tree[node*2]), f = get<2>(tree[node*2+1]), g = get<3>(tree[node*2]), h = get<3>(tree[node*2+1]);
+	if( a == b )
+		tree[node] = make_tuple(a, max(c,d), e+f, g+h);
+	else if( a > b)
+		tree[node] = make_tuple(a, max(b,c), e, g+h);
+	else if( a < b)
+		tree[node] = make_tuple(b, max(a,d), f, g+h);
+}
+
+void init(int node, int start, int end){
+	if(start == end){
+		tree[node] = make_tuple(arr[end],-1, 1, arr[end] );
+		return;
+	}
+	init(node*2, start, (start+end)/2);
+	init(node*2+1, (start+end)/2+1, end);
+	long long a = get<0>(tree[node*2]), b = get<0>(tree[node*2+1]), c = get<1>(tree[node*2]), d = get<1>(tree[node*2+1]), e = get<2>(tree[node*2]), f = get<2>(tree[node*2+1]), g = get<3>(tree[node*2]), h = get<3>(tree[node*2+1]);
+	if( a == b )
+		tree[node] = make_tuple(a, max(c,d), e+f, g+h);
+	else if( a > b)
+		tree[node] = make_tuple(a, max(b,c), e, g+h);
+	else if( a < b)
+		tree[node] = make_tuple(b, max(a,d), f, g+h);
+}
+
+long long getMax(int node, int start, int end, int left, int right){
+	lazy(node, start, end);
+	if( right < start || end < left) return 0;
+	if( left <= start && end <= right) return get<0>(tree[node]);
+	return max( getMax(node*2, start, (start+end)/2, left, right), getMax(node*2+1, (start+end)/2+1, end, left, right) );
+}
+
+long long getSum(int node, int start, int end, int left, int right){
+	lazy(node, start, end);
+	if( right < start || end < left) return 0;
+	if( left <= start && end <= right) return get<3>(tree[node]);
+	return getSum(node*2, start, (start+end)/2, left, right) + getSum(node*2+1, (start+end)/2+1, end, left, right);
+}
+
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=1;i<=n;i++) cin >> arr[i];
+	cin >> m;
+	tree.resize(4*(n+11));
+	init(1,1,n);
+	
+	while(m--){
+		int order, l, r;
+		cin >> order >> l >> r;
+		
+		if( order == 1 ) {
+			long long x;
+			cin >> x;
+			updateMin(1,1,n,l,r,x);
+		}
+		else if( order == 2 ){
+			cout << getMax(1,1,n,l,r) << '\n';	
+		}
+		else if( order == 3){
+			cout << getSum(1,1,n,l,r) << '\n';	
+		}
+	}
+}
