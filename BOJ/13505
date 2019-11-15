@@ -1,0 +1,109 @@
+// http://blog.naver.com/PostView.nhn?blogId=dsyun96&logNo=221286427871&parentCategoryNo=&categoryNo=180&viewDate=&isShowPopularPosts=true&from=search 참고함
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+struct Trie{
+	Trie *zr, *on;	// zero, one
+	Trie(){
+		zr = on = NULL;
+	}
+	~Trie(){
+		if( zr != NULL) delete zr;
+		if( on != NULL) delete on;
+	}
+};
+
+int n, ans;
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	Trie *p = NULL, *root = new Trie();
+	
+	while(n--){
+		int su;
+		cin >> su;
+		
+		p = root;
+		
+		int bit = 29, val = 0;
+		
+		// su에 대한 비트정보 저장
+		while(true){
+			// 맨왼쪽비트가 0이면
+			if( ((su >> bit) & 1) == 0){
+				// 좌측으로 한 칸 밀어주고 1추가 p는 on으로
+				if(p->on != NULL){
+					val = (val << 1) | 1;
+					p = p->on;
+				}
+				// 좌측으로 한 칸 밀어주고 0추가 p는 zr로
+				else if( p->zr != NULL){
+					val <<= 1;
+					p = p->zr;
+				}
+				else break;
+			}
+			// 맨왼쪽비트가 1이면
+			else{
+				// 좌측으로 한 칸 밀어주고 1추가 p는 zr으로
+				if( p->zr != NULL){
+					val = (val << 1) | 1;
+					p= p->zr;
+				}
+				// 좌측으로 한 칸 밀어주고 0추가 p는 on으로
+				else if( p->on != NULL){
+					val <<= 1;
+					p = p->on;
+				}
+				else
+					break;
+			}
+			
+			--bit;
+		}
+		ans = max(ans, val);
+		
+		p = root;
+		bit = 29;
+		
+		// 맨왼쪽비트부터 오른쪽비트로
+		while( bit >= 0){
+			// 맨왼쪽비트가 0이면
+			if( ( ( su >> bit) & 1) == 0){
+				// zr로 NULL이 아니면 이동하고 NULL이면 new Trie 생성
+				if( p->zr != NULL) p = p->zr;
+				else{
+					Trie *next = new Trie;
+					p->zr = next;
+					p = p->zr;
+				}
+			}
+			// 맨왼쪽비트가 1이면
+			else{
+				// on으로 NULL이 아니면 이동하고 NULL이면 new Trie 생성
+				if( p->on != NULL) p= p->on;
+				else{
+					Trie *next = new Trie;
+					p->on = next;
+					p = p->on;
+				}
+			}
+			--bit;
+		}
+	}
+	cout << ans;
+}
