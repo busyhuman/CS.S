@@ -1,0 +1,58 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+vector<int> tree;
+int n,ans[500001];
+vector< pair<int,int> > arr;
+bool comp(pair<int,int> a, pair<int,int> b){
+	return a.second < b.second;
+}
+
+void update(int node, int s, int e, int idx){
+	if(s > idx || e < idx) return;
+	if(s == e) {
+		tree[node] = 1;
+		return;
+	}
+	update(node*2,s,(s+e)/2,idx);
+	update(node*2+1,(s+e)/2+1,e,idx);
+	tree[node] = tree[node*2] + tree[node*2+1];
+}
+int query(int node, int s, int e, int l ,int r){
+	if(s > r || e < l) return 0;
+	if(l <= s && e <= r) return tree[node];
+	return query(node*2,s,(s+e)/2,l,r) + query(node*2+1,(s+e)/2+1,e,l,r);
+}
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	tree.resize(4*(n+11));
+	
+	for(int i=0;i<n;i++) {
+		int su;
+		cin >> su;
+		arr.push_back( make_pair(su,i));
+	}
+	sort(arr.begin(), arr.end() );
+	for(int i=0;i<n;i++) arr[i].first = i;
+	sort(arr.begin(), arr.end(), comp );
+
+	for(int i=0;i<n;i++){
+		cout << i-query(1,0,n-1,0,arr[i].first)+1 << '\n';
+		update(1,0,n-1,arr[i].first);
+	}
+}
