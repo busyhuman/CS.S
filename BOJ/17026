@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, ans, maxy=-inf, maxi=inf;
+vector< tuple<int,int,int> > arr;
+bool comp( tuple<int,int,int> a, tuple<int,int,int> b){
+	if( get<0>(a) == get<0>(b)){
+		if( get<1>(a) == get<1>(b) ) return get<2>(a) < get<2>(b);
+		else return get<1>(a) > get<1>(b);
+	}
+	return get<0>(a) < get<0>(b);
+}
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=0;i<n;i++){
+		int x, y;
+		cin >> x >> y;
+		arr.push_back(make_tuple(x-y,x+y,i) );
+	}
+	sort(arr.begin(), arr.end(), comp );
+	for(int i=0;i<n;i++){
+		int su = get<1>(arr[i]);
+	//	cout << get<0>(arr[i]) << ' ' << get<1>(arr[i]) << ' ' << get<2>(arr[i]) << '\n';
+		if( maxy < su ) {
+			maxy = su;
+			ans++;
+		}
+	}
+	cout << ans;
+}
