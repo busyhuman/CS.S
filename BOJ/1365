@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, arr[100001];
+vector<int> dp;
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=0;i<n;i++) cin >> arr[i];
+	dp.push_back(arr[0]);
+	for(int i=1;i<n;i++){
+		if( dp[dp.size()-1] < arr[i]) dp.push_back(arr[i]);
+		else{
+			*lower_bound(dp.begin(), dp.end(), arr[i]) = arr[i];
+		}
+	}
+	cout << n-dp.size();
+}
