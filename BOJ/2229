@@ -1,0 +1,34 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n,arr[1001],dp1[1001][1001],dp2[1001][1001],dp3[1001],ans;
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=1;i<=n;i++) cin >> arr[i];
+	for(int i=1;i<=n;i++){
+		dp2[i][i-1] = inf;
+		for(int j=i;j<=n;j++){
+			dp1[i][j] = max(arr[j], dp1[i][j-1]);
+			dp2[i][j] = min(arr[j], dp2[i][j-1]);
+		}
+	}
+	for(int i=1;i<=n;i++)
+		for(int j=1;j<=i;j++)
+			dp3[i] = max(dp3[i], dp3[j-1] + dp1[j][i] - dp2[j][i] );
+	cout << dp3[n];
+}
