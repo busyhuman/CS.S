@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int t,dp[101], arr[3]={1,10,25},ans;
+long long n;
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> t;
+
+	dp[0] = 0;
+	for(int i=1;i<=100;i++){
+		dp[i] = inf;
+		for(int j=0;j<3;j++){
+			if(i-arr[j] >= 0)
+				dp[i] = min(dp[i], dp[i-arr[j]]+1);
+		}
+	}
+	while(t--){
+		cin >> n;
+		ans=0;
+		while(n){
+			ans += dp[n%100];
+			n /= 100;
+		}
+		cout << ans << '\n';
+	}
+}
