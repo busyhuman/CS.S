@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, k;
+long long ans;
+multiset<int> msk;
+priority_queue< pair<int,int> > pqj;
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n >> k;
+	for(int i=1;i<=n;i++){
+		int x, y;
+		cin >> x >> y;
+		pqj.push( make_pair(y,x) );
+	}
+	while(k--){
+		int su;
+		cin >> su;
+		msk.insert(su);
+	}
+	while( !msk.empty() && !pqj.empty() ){
+		int valuej = pqj.top().first, weightj = pqj.top().second;
+		pqj.pop();
+	//	cout << weightj << ' ' << *lower_bound(msk.begin(), msk.end(), weightj) << '\n';
+		if(msk.lower_bound(weightj) != msk.end() ){
+			ans += valuej;
+			msk.erase(msk.lower_bound(weightj));
+		}
+	}
+	cout << ans;
+}
