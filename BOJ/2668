@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int n, arr[101];
+vector<int> anslist;
+bool visit[101];
+bool dfs(int now, int start){
+	if(visit[now]) return false;
+	visit[now] = true;
+	if(arr[now] == start) return true;
+	return dfs(arr[now], start);
+}
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for(int i=1;i<=n;i++) cin >> arr[i];
+	for(int i=1;i<=n;i++){
+		memset(visit, false, sizeof(visit) );
+		if (dfs(i,i)) anslist.push_back(i);
+	}
+	int len = anslist.size();
+	cout << len << '\n';
+	for(int i=0;i<len;i++) cout << anslist[i] << '\n';
+}
