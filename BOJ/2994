@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+int t,n,dp[501][5001],arr[501],ans[501];
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> t >> n;
+	for(int i=1;i<=n;i++){
+		cin >> arr[i];
+	}
+	for(int i=1;i<=n;i++){
+		for(int j=0;j<=t;j++){
+			dp[i][j] = dp[i-1][j];
+			if(j-arr[i] >= 0 && dp[i][j] < dp[i-1][j-arr[i]]+arr[i]){
+				dp[i][j] = dp[i-1][j-arr[i]]+arr[i];
+			}
+		}
+	}
+	/*
+	for(int i=1;i<=n;i++){
+		for(int j=0;j<=t;j++){	
+			cout << dp[i][j] << ' ';
+			
+		}
+		cout << '\n';
+	}
+	*/
+	vector<int> g1,g2;
+	g1.push_back(n);
+	int su = dp[n][t];
+	
+	for(int i=n-1;i>=1;i--){
+		if(su == dp[i][t]) g1.pop_back();
+		else t -= arr[i+1];
+		if(!t) break;
+		su = dp[i][t];
+		g1.push_back(i);
+	}
+	int cnt=0;
+	for(int i=n;i>=1;i--){
+		if(i == g1[cnt]) cnt++;
+		else g2.push_back(i);
+	}
+	
+	int len1 = g1.size(), len2 = g2.size(), sum=0;
+	for(int i=0;i<len1;i++){
+		ans[g1[i]] = sum;
+		sum += arr[g1[i]];
+	}
+	sum=0;
+	for(int i=0;i<len2;i++){
+		ans[g2[i]] = sum;
+		sum += arr[g2[i]];
+	}
+	for(int i=1;i<=n;i++) cout << ans[i] << ' ';
+}
