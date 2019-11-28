@@ -63,7 +63,7 @@ void update(int node, int start, int end, int idx, int su){
 		tree[node].first = t3;
 		tree[node].second = t4;
 	}
-	else{
+	else{ 
 		if(t2 < t4){
 			tree[node].first = t1;
 			tree[node].second = t2;
