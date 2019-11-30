@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+queue<int> q, l;
+string s1, s2;
+int su1,su2;
+bool visit[4100];
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> s1;
+	cin >> s2;
+	int len1= s1.size(), dan = 1;
+	for(int i=len1-1;i>=0;i--){
+		su1 += (s1[i] - '0') * dan;
+		dan *= 2;
+	}
+	dan =1;
+	int len2= s2.size();
+	for(int i=len2-1;i>=0;i--){
+		su2 += (s2[i] - '0') * dan;
+		dan *= 2;
+	}
+	q.push(su1);
+	l.push(0);
+	visit[su1]=true;
+	while( !q.empty() ){
+		int qf = q.front(), lf = l.front();
+		q.pop(), l.pop();
+		if(qf == su2) {
+			cout << lf;
+			break;
+		}
+		int len = 0;
+		for(int i=20;i>=0;i--){
+			if( qf & (1 << i)){
+				len = i;
+				break;
+			}
+		}
+		for(int i=len-1;i>=0;i--){
+			if( ( qf & (1 << i)) == 0 && visit[qf+(1 << i)] == false){
+				visit[qf+(1 << i)] = true;
+				q.push(qf+(1 << i));
+				l.push(lf+1);
+			}
+			 if( ( qf & (1 << i)) && visit[qf-(1 << i)] == false){
+				visit[qf-(1 << i)] = true;
+				q.push(qf-(1 << i));
+				l.push(lf+1);
+			}
+		}
+		
+		if( qf+1 <= 2048 && visit[qf+1] == false){
+			visit[qf+1] = true;
+			q.push(qf+1);
+			l.push(lf+1);
+		}
+		if( qf && visit[qf-1] == false){
+			visit[qf-1] = true;
+			q.push(qf-1);
+			l.push(lf+1);
+		}
+	}
+}
