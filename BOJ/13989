@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+#include <regex>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+string str;
+int main() {
+    cin.sync_with_stdio(false);
+	cin.tie(NULL);
+	regex r("\\b([A-Z][a-z]+\\s)+[A-Z][a-z]+\\b");
+	smatch m;
+	while( getline(cin, str) ){
+		while( regex_search(str, m, r) ){
+			cout << m.prefix();
+			regex r2("[A-Z]");
+			smatch m2;
+			string str2 = m.str();
+			while( regex_search(str2,m2,r2) ){
+				cout << m2.str();
+				str2 = m2.suffix();
+			}
+			cout << " (";
+			cout << m[0].str();
+			cout << ")";
+			str = m.suffix();
+		}
+		cout << str;
+		cout << '\n';
+	}
+}
