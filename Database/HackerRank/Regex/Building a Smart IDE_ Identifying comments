@@ -1,0 +1,21 @@
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
+
+        while(sc.hasNext()){
+            sb.append(sc.nextLine().trim());
+            sb.append("\n");
+        }
+        Pattern p = Pattern.compile("(//.*)|((?s)/\\*.*?\\*/)");
+        Matcher m = p.matcher(sb.toString());
+        while(m.find()){
+            System.out.println(m.group());
+        }
+    }
+}

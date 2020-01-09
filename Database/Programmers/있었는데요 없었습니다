@@ -1,0 +1,3 @@
+select ain.animal_id, ain.name from animal_ins as ain
+  left join animal_outs as aout on ain.animal_id = aout.animal_id
+  where ain.datetime > aout.datetime order by ain.datetime asc;

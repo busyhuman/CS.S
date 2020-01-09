@@ -1,0 +1,3 @@
+select round(s1.lat_n,4) from station as s1
+    where (select count(lat_n) from station where lat_n > s1.lat_n)
+    = (select count(lat_n) from station where lat_n < s1.lat_n); 

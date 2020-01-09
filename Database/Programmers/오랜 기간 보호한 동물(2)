@@ -1,0 +1,3 @@
+select aout.animal_id, aout.name from animal_outs as aout
+  inner join animal_ins as ain on aout.animal_id = ain.animal_id
+  where (aout.animal_id is not null) and (ain.datetime < aout.datetime) order by aout.datetime - ain.datetime desc limit 2;

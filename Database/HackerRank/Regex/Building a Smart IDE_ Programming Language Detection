@@ -1,0 +1,35 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+#include <regex>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+string str,str2,str3;
+int main() {
+    cin.sync_with_stdio(false);
+    cin.tie(NULL);
+
+    while(getline(cin,str) ){
+        str2 += str;
+        str2 += '\n';
+    }
+    str3 = str2;
+    regex r1("void main|import java");
+    regex r2("int main");
+    smatch m;
+    
+    if(regex_search(str2,m,r1) ) cout << "Java";
+    else if(regex_search(str2,m,r2) ) cout << "C";
+    else cout << "Python";
+}

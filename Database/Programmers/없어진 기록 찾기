@@ -1,0 +1,3 @@
+select aout.animal_id, aout.name from animal_outs as aout
+  left join animal_ins as ain on ain.animal_id = aout.animal_id
+  where ain.animal_id is null order by aout.animal_id asc;

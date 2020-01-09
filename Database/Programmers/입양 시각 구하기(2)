@@ -1,0 +1,4 @@
+set @h = -1;
+
+select (@h := @h+1) as HOUR, (select count(animal_id) from animal_outs
+  where substr(datetime,12,2) = @h) from animal_outs where @h <= 22;

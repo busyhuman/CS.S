@@ -1,0 +1,36 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+class Message {
+public: 
+    static int idx;
+    int id = 0;
+    string msg;
+
+    Message(string txt) {
+        msg = txt;
+        id = idx++;
+    }
+    const string& get_text() {
+        return msg;
+    }
+
+    bool operator < (const Message m){
+        return id < m.id;
+    }
+};
+
+int Message::idx = 0;
+
+class MessageFactory {
+public:
+    MessageFactory() {}
+    Message create_message(const string& text) {
+        return Message(text);
+    }
+};
+
+class Recipient {

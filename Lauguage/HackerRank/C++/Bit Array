@@ -1,0 +1,33 @@
+// 테케 5번 8번 안나옴
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+#include <regex>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+const int MOD = 2147483648;
+long long n,s,p,q;
+int main() {
+    cin.sync_with_stdio(false);
+    cin.tie(NULL);
+    cin >> n >> s >> p >> q;
+    long long curr,prev = s % MOD, cnt=1;
+    curr = prev;
+    for(int i=1;i<n;i++){
+        prev = (((prev*p) % mod)+q) % MOD;
+        if(prev == curr) break;
+        cnt++;
+    }
+    cout << cnt;
+}

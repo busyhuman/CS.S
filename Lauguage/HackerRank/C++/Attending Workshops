@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+#include <algorithm>
+class Workshop{
+public:
+    int start;
+    int duration;
+};
+
+class Available_Workshops{
+public:
+   int len;
+   Workshop* ws;
+};
+Available_Workshops* initialize(int* st, int* du, int n){
+   Available_Workshops* av = new Available_Workshops();
+   av->ws = new Workshop[n];
+   av->len = n;
+   for(int i=0;i<n;i++){
+      av->ws[i].start = st[i];
+      av->ws[i].duration = du[i];
+   }
+   return av;
+}
+bool comp(Workshop a, Workshop b){
+   return a.start+a.duration < b.start+b.duration;
+}
+static int CalculateMaxWorkshops(Available_Workshops* av){
+   sort(av->ws, av->ws+av->len, comp);
+   int ans=1;
+   int mini = av->ws[0].start, maxi = av->ws[0].duration + mini;
+
+   for(int i=1;i<av->len;i++){
+      int start = av->ws[i].start, ending = start+ av->ws[i].duration;
+      if( start >= maxi){
+         ans++;
+         maxi = ending;
+         mini = start;
+      }
+
+   }
+  return ans;
+}
+int main(int argc, char *argv[]) {
+    int n; // number of workshops
+    cin >> n;
+    // create arrays of unknown size n
+    int* start_time = new int[n];
+    int* duration = new int[n];
+
+    for(int i=0; i < n; i++){
+        cin >> start_time[i];
+    }
+    for(int i = 0; i < n; i++){
+        cin >> duration[i];
+    }
+
+    Available_Workshops * ptr;
+    ptr = initialize(start_time,duration, n);
+    cout << CalculateMaxWorkshops(ptr) << endl;
+    return 0;
+}

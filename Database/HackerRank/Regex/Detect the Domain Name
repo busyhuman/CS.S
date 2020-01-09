@@ -1,0 +1,48 @@
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <set>
+#include <map>
+#include <regex>
+using namespace std;
+#define inf 2000000000
+#define mod 1000000007
+map<string, bool> dict;
+int main() {
+    cin.sync_with_stdio(false);
+    cin.tie(NULL);
+    int n;
+    cin >> n;
+    string str,str2,str3;
+    cin.ignore(1);
+    for(int i=0;i<n;i++){
+        string str;
+        getline(cin, str);
+        str2 += str;
+        str2 += '\n';
+    }
+    
+    regex r("https?:\\/\\/(ww[w2]\\.)?(([A-Za-z\\d-]+\\.)+[A-Za-z\\d]+)");
+
+    smatch m;
+    vector<string> arr;
+    while(regex_search(str2,m,r)){
+        if( dict[m[2].str()] == false){
+            arr.push_back(m[2].str());
+            dict[m[2].str()] = true;
+        }
+        str2 = m.suffix();
+    }
+    sort(arr.begin(), arr.end());
+    int len = arr.size();
+    for(int i=0;i<len-1;i++) cout << arr[i] << ';';
+    cout << arr[len-1];
+}

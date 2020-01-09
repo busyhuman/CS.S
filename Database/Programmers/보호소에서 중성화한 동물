@@ -1,0 +1,4 @@
+select ain.animal_id, ain.animal_type, ain.name from animal_ins as ain
+  left join animal_outs as aout on ain.animal_id = aout.animal_id
+  where (ain.sex_upon_intake = 'Intact Male' or ain.sex_upon_intake = 'Intact Female') and (aout.sex_upon_outcome = 'Spayed Female' or aout.sex_upon_outcome = 'Neutered Male') order by ain.animal_id;
+

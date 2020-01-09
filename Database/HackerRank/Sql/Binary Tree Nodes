@@ -1,0 +1,1 @@
+select concat(n, " ", if(p is null,"Root", if(n in (select distinct p from BST),"Inner","Leaf" ))) from BST order by n asc;

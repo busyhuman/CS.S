@@ -1,0 +1,3 @@
+select ain.name, ain.datetime from animal_ins as ain
+  left join animal_outs as aout on ain.animal_id = aout.animal_id
+  where aout.animal_id is null order by ain.datetime asc limit 3;

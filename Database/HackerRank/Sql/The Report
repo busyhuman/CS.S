@@ -1,0 +1,1 @@
+select if( marks <= 69, Null, name), (select grade from grades where marks >= grades.min_mark and marks <= grades.max_mark) as gg, marks from students order by gg desc, name asc, marks asc;
