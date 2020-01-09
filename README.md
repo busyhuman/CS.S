@@ -1,2 +1,3 @@
-# Algorithm
-백준 : https://www.acmicpc.net/user/busyhuman
+# Study
+
+컴퓨터공학관련 문제풀이 모음 
