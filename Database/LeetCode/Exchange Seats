@@ -3,4 +3,4 @@ select s.id as id, if((s.id mod 2)=0,
                 if(s.id = (select max(id) from seat),
                     (select student from seat where id = s.id),
                     (select student from seat where id = s.id+1))) as student
-                from seat as s;
+                from seat as s; 
