@@ -1,3 +1,4 @@
+// map을 쓰면 10번 케이스에서 시간초과가 난다.. 시간버리기 좋은 문제였다.
 #include <bits/stdc++.h>
 
 using namespace std;
