@@ -32,7 +32,7 @@ int dfs(int now, int sum){
 	
 	if(now==0) op = '+';
 	else op = str[now-1];
-	
+	d
 	if(now+2 < n) maxi = max(maxi, dfs(now+4, calc(sum, calc(str[now]-'0',str[now+2]-'0',str[now+1]),op) ) );
 	maxi = max(maxi,dfs(now+2,calc(sum, str[now]-'0',op)) );
 	
