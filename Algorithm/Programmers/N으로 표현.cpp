@@ -23,4 +23,3 @@ int solution(int N, int number) {
     dfs(0,0,N,number);
     return answer > 8 ? -1 : answer;
 }
- 
