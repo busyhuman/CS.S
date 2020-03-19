@@ -19,6 +19,12 @@ int find(int u){
 	if(u == dp[u]) return u;
 	else return dp[u] = find(dp[u]);
 }
+
+void uni(int a, int b){
+	a = find(a);
+	b = find(b);
+	dp[a] = b;
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
@@ -27,10 +33,10 @@ int main() {
 	for(int i=1;i<=g;i++) dp[i]=i;
 	for(int i=0;i<p;i++) cin >> arr[i];
 	int ans = 0;
-	for(int i=0;i<g;i++){
+	for(int i=0;i<p;i++){
 		int su = find(arr[i]);
 		if(dp[arr[i]] == 0) break;
-		dp[ arr[i] ] = su-1;
+		uni(su,su-1);
 		ans++;
 	}
 	cout << ans;
