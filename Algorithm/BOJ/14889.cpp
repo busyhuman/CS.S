@@ -19,6 +19,7 @@ vector<int> v1,v2;
 void dfs(int su){
     if(su == n){
         int c1=0,c2=0,sum,vlen1=v1.size(), vlen2=v2.size();
+		if(vlen1 != vlen2) return;
  //       cout << v1.size() << " "  << v2.size() << '\n';
         for(int i=0;i<vlen1;i++){
             for(int j=i+1;j<vlen1;j++){
@@ -31,7 +32,7 @@ void dfs(int su){
                 c2 += arr[v2[i]][v2[j]] + arr[v2[j]][v2[i]];
             }
         }
-        
+     
         sum=abs(c1-c2);
         mini = min(mini,sum);
         return;
