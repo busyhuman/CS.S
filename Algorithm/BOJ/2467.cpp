@@ -30,17 +30,21 @@ int main() {
 
 	int posLen = pos.size(), negLen = neg.size(), ans=inf, ans2, ans3;
 	
-	if(posLen >= 2){
-		ans = min(pos[0]+pos[1],ans);
-		ans2 = pos[0];
-		ans3 = pos[1];
-	}
-	if(negLen >= 2){
-		ans = min(neg[negLen-1]+neg[negLen-2],ans);
-		ans2 = -neg[negLen-2];
-		ans3 = -neg[negLen-1];
-	}
 
+	if(negLen >= 2){
+        if(ans > abs(neg[negLen-1]+neg[negLen-2]) ){
+            ans = abs(neg[negLen-1]+neg[negLen-2]);
+            ans2 = -neg[negLen-2];
+            ans3 = -neg[negLen-1];
+        }
+	}
+	if(posLen >= 2){
+        if(ans > pos[0]+pos[1]){
+            ans = pos[0]+pos[1];
+            ans2 = pos[0];
+            ans3 = pos[1];
+        }
+	}
 	if(posLen){
 		for(int i=0;i<negLen;i++){
 			int num = neg[i], left = 0, right = posLen-1;
