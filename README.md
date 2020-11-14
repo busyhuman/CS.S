@@ -1,4 +1,4 @@
-## CES(Computer Engineering Study)
+## CS 
 
 * 컴퓨터공학 관련 문제풀이 모음
 * 사이트별 중간 난이도(Medium, Level 3) 이상 업로드
